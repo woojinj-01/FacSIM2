@@ -1,0 +1,10 @@
+fig/*
+!fig/.gitkeep
+data/*
+!data/.gitkeep
+facsimlib/__pycache__
+test/__pycache__
+results.txt
+sandbox.py
+setup.cfg
+typo_history.ini
