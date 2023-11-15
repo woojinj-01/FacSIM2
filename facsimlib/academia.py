@@ -201,11 +201,13 @@ class Field():
 
         net_rand = deepcopy(self.net)
 
-        inst_names = list(net_rand.nodes)
+        inst_names_u = list(net_rand.nodes)
+        inst_names_v = list(net_rand.nodes)
 
         count = len(list(self.net.edges))
 
-        shuffle(inst_names)
+        shuffle(inst_names_u)
+        shuffle(inst_names_v)
 
         out_degs = {}
         in_degs = {}
@@ -220,12 +222,23 @@ class Field():
 
         while count > 0:
 
-            u_name = choice(inst_names)
-            v_name = choice(inst_names)
+            u_name = choice(inst_names_u)
+            v_name = choice(inst_names_v)
 
             if (out_degs[u_name] > 0 and in_degs[v_name] > 0):
 
                 net_rand.add_edge(u_name, v_name)
+
+                out_degs[u_name] -= 1
+                in_degs[v_name] -= 1
+
+                if (out_degs[u_name] == 0):
+
+                    inst_names_u.remove(u_name)
+
+                if (in_degs[v_name] == 0):
+
+                    inst_names_v.remove(v_name)
 
                 count -= 1
 
