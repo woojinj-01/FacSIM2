@@ -330,8 +330,8 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
     
     rank_length = network.rank_length
     
-    min_rank = 1 if percent_low == 0 else math.ceil(float(rank_length * percent_low / 100))
-    max_rank = rank_length if percent_high == 100 else math.floor(float(rank_length * percent_high / 100))
+    min_limit = 1 if percent_low == 0 else math.ceil(float(rank_length * percent_low / 100))
+    max_limit = rank_length if percent_high == 100 else math.floor(float(rank_length * percent_high / 100))
     
     def rank_move(u_name, v_name, network: Field):
 
@@ -344,14 +344,14 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
         v_rank = ranks[v_name_norm]
 
         if (all(rank is not None for rank in [u_rank, v_rank])):
-            if (all(min_rank <= rank <= max_rank for rank in [min_rank, max_rank])):
+            if (min_limit <= u_rank <= max_limit):
                 return ranks[u_name_norm] - ranks[v_name_norm]
             
         return None
 
     if (percent_low == 0 and percent_high == 100):
         fig_path = f"./fig/rankmove_{network.name}.png"
-        
+
     else:
         fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png"
 
@@ -571,13 +571,11 @@ if (__name__ == "__main__"):
         network_dict[field] = Field(field)
         facsimlib.processing.process_file(df_list, network_dict[field])
 
-    for net in network_dict.values():
+    net_closed = network_dict["Computer Science"].closed
 
-        net_closed = net.closed
+    net_closed.set_ranks()
 
-        net_closed.set_ranks()
-
-        plot_relative_rank_move(net_closed)
-        plot_relative_rank_move(net_closed, 0, 25)
-        plot_relative_rank_move(net_closed, 50, 75)
+    plot_relative_rank_move(net_closed)
+    plot_relative_rank_move(net_closed, 0, 25)
+    plot_relative_rank_move(net_closed, 50, 75)
 
