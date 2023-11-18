@@ -1,11 +1,8 @@
 import scipy.stats
 import math
-import numpy as np
-from sklearn.cluster import KMeans
 
 from facsimlib.academia import Field
 from facsimlib.text import normalize_inst_name
-from facsimlib.processing import construct_network
 
 
 def _extract_common_ranks(network1: Field, network2: Field):

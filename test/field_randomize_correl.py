@@ -24,7 +24,7 @@ if (__name__ == "__main__"):
 
     net_source = networks["Computer Science"].closed
 
-    net_source_rand = net_source.randomize(500)
+    net_source_rand = net_source.randomize(10)
 
     net_source.set_ranks()
 

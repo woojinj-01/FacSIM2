@@ -513,7 +513,7 @@ def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
         rank_gathered = [ranks[i] for ranks in rank_common_v_list]
 
         rank_common_v_mean.append(np.mean(rank_gathered))
-        rank_common_v_std.append(np.std(rank_gathered))
+        rank_common_v_std.append(np.max([np.max(rank_gathered) - np.mean(rank_gathered), np.mean(rank_gathered) - np.min(rank_gathered)]))
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
@@ -558,16 +558,11 @@ if (__name__ == "__main__"):
 
         net_rand = net.random
 
-        net_closed = net.closed
-        net_closed_rand = net_closed.random
+        # net_closed = net.closed
+        # net_closed_rand = net_closed.random
 
-        net.set_ranks()
+        # net.set_ranks()
         net_rand.set_ranks()
 
-        net_closed.set_ranks()
-        net_closed_rand.set_ranks()
-
-        plot_rank_comparison(net, net_rand)
-        plot_rank_comparison(net_closed, net_closed_rand)
-
+        plot_relative_rank_move(net_rand)
 
