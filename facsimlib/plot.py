@@ -328,8 +328,6 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
     elif (not percent_low < percent_high):
         return None
     
-    fig_path = f"./fig/rankmove_{network.name}.png"
-    
     rank_length = network.rank_length
     
     min_rank = 1 if percent_low == 0 else math.ceil(float(rank_length * percent_low / 100))
@@ -350,8 +348,13 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
                 return ranks[u_name_norm] - ranks[v_name_norm]
             
         return None
+
+    if (percent_low == 0 and percent_high == 100):
+        fig_path = f"./fig/rankmove_{network.name}.png"
         
-    
+    else:
+        fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png"
+
     rank_moves = []
     max_rank = 0
 
@@ -570,13 +573,11 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_rand = net.random
+        net_closed = net.closed
 
-        # net_closed = net.closed
-        # net_closed_rand = net_closed.random
+        net_closed.set_ranks()
 
-        # net.set_ranks()
-        net_rand.set_ranks()
-
-        plot_relative_rank_move(net_rand)
+        plot_relative_rank_move(net_closed)
+        plot_relative_rank_move(net_closed, 0, 25)
+        plot_relative_rank_move(net_closed, 50, 75)
 
