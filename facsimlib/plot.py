@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 
 import facsimlib.processing
 import facsimlib.math
@@ -315,10 +316,24 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     plt.clf()
 
 
-def plot_relative_rank_move(network: Field):
+def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
 
     if (not isinstance(network, Field)):
         return None
+    
+    if (any(int(num) != num for num in [percent_low, percent_high])):
+        return None
+    elif (not all(0 <= num <= 100 for num in [percent_low, percent_high])):
+        return None
+    elif (not percent_low < percent_high):
+        return None
+    
+    fig_path = f"./fig/rankmove_{network.name}.png"
+    
+    rank_length = network.rank_length
+    
+    min_rank = 1 if percent_low == 0 else math.ceil(float(rank_length * percent_low / 100))
+    max_rank = rank_length if percent_high == 100 else math.floor(float(rank_length * percent_high / 100))
     
     def rank_move(u_name, v_name, network: Field):
 
@@ -331,12 +346,11 @@ def plot_relative_rank_move(network: Field):
         v_rank = ranks[v_name_norm]
 
         if (all(rank is not None for rank in [u_rank, v_rank])):
-            return ranks[u_name_norm] - ranks[v_name_norm]
+            if (all(min_rank <= rank <= max_rank for rank in [min_rank, max_rank])):
+                return ranks[u_name_norm] - ranks[v_name_norm]
+            
+        return None
         
-        else:
-            return None
-        
-    fig_path = f"./fig/rankmove_{network.name}.png"
     
     rank_moves = []
     max_rank = 0
