@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from scipy.interpolate import make_interp_spline
 
 import facsimlib.processing
 import facsimlib.math
@@ -356,12 +357,6 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
         fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png"
 
     rank_moves = []
-    max_rank = 0
-
-    for rank in network.ranks(inverse=True).values():
-
-        if (rank is not None):
-            max_rank += 1
     
     for move in list(network.net.edges):
 
@@ -369,7 +364,15 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
 
         if (r_move is not None):
 
-            rank_moves.append(r_move / max_rank)
+            rank_moves.append(r_move / rank_length)
+
+    bins = np.linspace(-1, 1, 40)
+    bins_interp = np.linspace(-1, 1, 1000)
+
+    # Create a histogram
+    hist, bin_edges = np.histogram(rank_moves, bins=bins_interp)
+
+    spline = make_interp_spline(bin_edges[:-1], hist, k=3)
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
@@ -380,8 +383,6 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
     x_label = "Relative Rank Change"
     y_label = "Number of Alumni"
 
-    bins = [-1 + 0.05 * i for i in range(41)]
-
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
@@ -389,6 +390,8 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
     plt.xlim(-1, 1)
 
     plt.hist(rank_moves, bins=bins)
+
+    plt.plot(bins_interp, spline(bins_interp), 'r-')
 
     # plt.legend()
 
@@ -571,11 +574,15 @@ if (__name__ == "__main__"):
         network_dict[field] = Field(field)
         facsimlib.processing.process_file(df_list, network_dict[field])
 
-    net_closed = network_dict["Computer Science"].closed
+    for net in network_dict.values():
 
-    net_closed.set_ranks()
+        net_target = net.closed
 
-    plot_relative_rank_move(net_closed)
-    plot_relative_rank_move(net_closed, 0, 25)
-    plot_relative_rank_move(net_closed, 50, 75)
+        net_target.set_ranks()
+
+        plot_relative_rank_move(net_target)
+        plot_relative_rank_move(net_target, 0, 25)
+        plot_relative_rank_move(net_target, 25, 50)
+        plot_relative_rank_move(net_target, 50, 75)
+        plot_relative_rank_move(net_target, 75, 100)
 
