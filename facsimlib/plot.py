@@ -465,9 +465,6 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
     
     (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v, normalized)
 
-    print(rank_common_u)
-    print(rank_common_v)
-
     max_rank_u = len(network_u.ranks()) if normalized is False else 1 
     max_rank_v = len(network_v.ranks()) if normalized is False else 1
 
@@ -481,8 +478,8 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
         plt.xlim(0, 1)
         plt.ylim(0, 1)
 
-        plt.xticks([0, 1])
-        plt.yticks([0, 1])
+        plt.xticks(np.arange(0, 1.1, 0.25))
+        plt.yticks(np.arange(0, 1.1, 0.25))
 
         title = "Rank Comparison"
         x_label = f"Normalized Rank (Network: {network_u.name})"
@@ -496,7 +493,7 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
         plt.plot([0, 1], [0, 1], c='black', linewidth=0.5)
 
-        # plt.savefig(fig_path)
+        plt.savefig(fig_path)
         plt.clf()
     
     else:
@@ -519,7 +516,7 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
         plt.plot([1, max_rank_u], [1, max_rank_v], c='black', linewidth=0.5)
 
-        # plt.savefig(fig_path)
+        plt.savefig(fig_path)
         plt.clf()
 
 
@@ -594,5 +591,5 @@ if (__name__ == "__main__"):
         net.set_ranks()
         net_closed.set_ranks()
 
-        plot_rank_comparison(net, net_closed, normalized=False)
+        plot_rank_comparison(net, net_closed)
 
