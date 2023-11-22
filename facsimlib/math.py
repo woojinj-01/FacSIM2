@@ -21,7 +21,7 @@ def _extract_common_ranks(network1: Field, network2: Field, normalized=False):
             continue
 
         rank1 = ranks_net1[name]
-        rank2 = ranks_net1[name]
+        rank2 = ranks_net2[name]
 
         if (rank1 is None or rank2 is None):
             continue
