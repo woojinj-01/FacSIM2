@@ -588,9 +588,12 @@ if (__name__ == "__main__"):
         net_target.set_ranks()
 
         plot_relative_rank_move(net)
+
         plot_relative_rank_move(net, normalized=True)
 
         plot_relative_rank_move(net_target)
+
         plot_relative_rank_move(net_target, normalized=True)
+
     
 
