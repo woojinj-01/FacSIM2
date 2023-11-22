@@ -454,7 +454,7 @@ def plot_relative_rank_difference(network_u: Field, network_v: Field):
     pass
 
 
-def plot_rank_comparison(network_u: Field, network_v: Field):
+def plot_rank_comparison(network_u: Field, network_v: Field, relative_rank=True):
 
     fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.png"
     
