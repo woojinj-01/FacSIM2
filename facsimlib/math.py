@@ -10,8 +10,8 @@ def _extract_common_ranks(network1: Field, network2: Field, normalized=False):
     rank_list_1 = []
     rank_list_2 = []
 
-    ranks_net1 = network1.ranks(normalized=normalized)
-    ranks_net2 = network2.ranks(normalized=normalized)
+    ranks_net1 = network1.ranks(inverse=True, normalized=normalized)
+    ranks_net2 = network2.ranks(inverse=True, normalized=normalized)
 
     inst_names = sorted(list(network1.net.nodes))
 
