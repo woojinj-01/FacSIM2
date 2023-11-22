@@ -5,22 +5,25 @@ from facsimlib.academia import Field
 from facsimlib.text import normalize_inst_name
 
 
-def _extract_common_ranks(network1: Field, network2: Field):
+def _extract_common_ranks(network1: Field, network2: Field, normalized=False):
 
     rank_list_1 = []
     rank_list_2 = []
+
+    ranks_net1 = network1.ranks(normalized=normalized)
+    ranks_net2 = network2.ranks(normalized=normalized)
 
     inst_names = sorted(list(network1.net.nodes))
 
     for name in inst_names:
 
-        if (any(inst is None for inst in [network1.inst(name), network2.inst(name)])):
+        if (name not in ranks_net1 or name not in ranks_net2):
             continue
 
-        rank1 = network1.inst(name)['rank']
-        rank2 = network2.inst(name)['rank']
+        rank1 = ranks_net1[name]
+        rank2 = ranks_net1[name]
 
-        if (any(rank is None for rank in [rank1, rank2])):
+        if (rank1 is None or rank2 is None):
             continue
         
         rank_list_1.append(rank1)

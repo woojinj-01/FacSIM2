@@ -454,11 +454,11 @@ def plot_relative_rank_difference(network_u: Field, network_v: Field):
     pass
 
 
-def plot_rank_comparison(network_u: Field, network_v: Field, relative_rank=True):
+def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
     fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.png"
     
-    (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v)
+    (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v, normalized)
 
     max_rank_u = len(network_u.ranks())
     max_rank_v = len(network_v.ranks())
