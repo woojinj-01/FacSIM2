@@ -370,7 +370,7 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
     bins_interp = np.linspace(-1, 1, 1000)
 
     # Create a histogram
-    hist, bin_edges = np.histogram(rank_moves, bins=bins_interp)
+    hist, bin_edges = np.histogram(rank_moves, bins=bins_interp, density=True)
 
     spline = make_interp_spline(bin_edges[:-1], hist, k=3)
 
@@ -389,9 +389,9 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
 
     plt.xlim(-1, 1)
 
-    plt.hist(rank_moves, bins=bins)
+    plt.hist(rank_moves, bins=bins, density=True, stacked=True)
 
-    plt.plot(bins_interp, spline(bins_interp), 'r-')
+    # plt.plot(bins_interp, spline(bins_interp), 'r-')
 
     # plt.legend()
 
@@ -577,12 +577,12 @@ if (__name__ == "__main__"):
     for net in network_dict.values():
 
         net_target = net.closed
+        net_rand = net_target.random
 
         net_target.set_ranks()
+        net_rand.set_ranks()
 
         plot_relative_rank_move(net_target)
-        plot_relative_rank_move(net_target, 0, 25)
-        plot_relative_rank_move(net_target, 25, 50)
-        plot_relative_rank_move(net_target, 50, 75)
-        plot_relative_rank_move(net_target, 75, 100)
+        plot_relative_rank_move(net_rand)
+    
 
