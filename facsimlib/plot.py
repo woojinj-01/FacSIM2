@@ -316,10 +316,22 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     plt.clf()
 
 
-def plot_relative_rank_move(network: Field):
+def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100, normalized=False):
 
     if (not isinstance(network, Field)):
         return None
+    
+    if (any(int(num) != num for num in [percent_low, percent_high])):
+        return None
+    elif (not all(0 <= num <= 100 for num in [percent_low, percent_high])):
+        return None
+    elif (not percent_low < percent_high):
+        return None
+    
+    rank_length = network.rank_length
+    
+    min_limit = 1 if percent_low == 0 else math.ceil(float(rank_length * percent_low / 100))
+    max_limit = rank_length if percent_high == 100 else math.floor(float(rank_length * percent_high / 100))
     
     def rank_move(u_name, v_name, network: Field):
 
@@ -332,20 +344,19 @@ def plot_relative_rank_move(network: Field):
         v_rank = ranks[v_name_norm]
 
         if (all(rank is not None for rank in [u_rank, v_rank])):
-            return ranks[u_name_norm] - ranks[v_name_norm]
-        
-        else:
-            return None
-        
-    fig_path = f"./fig/rankmove_{network.name}.png"
-    
+            if (min_limit <= u_rank <= max_limit):
+                return ranks[u_name_norm] - ranks[v_name_norm]
+            
+        return None
+
+    if (percent_low == 0 and percent_high == 100):
+        fig_path = f"./fig/rankmove_{network.name}.png" if normalized is False else f"./fig/rankmove_{network.name}_norm.png"
+
+    else:
+        fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png" if normalized is False \
+            else f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}_norm.png"
+
     rank_moves = []
-    max_rank = 0
-
-    for rank in network.ranks(inverse=True).values():
-
-        if (rank is not None):
-            max_rank += 1
     
     for move in list(network.net.edges):
 
@@ -353,7 +364,11 @@ def plot_relative_rank_move(network: Field):
 
         if (r_move is not None):
 
-            rank_moves.append(r_move / max_rank)
+            rank_moves.append(r_move / rank_length)
+
+    bins = np.linspace(-1, 1, 40)
+
+    hist, _ = np.histogram(rank_moves, bins=bins)
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
@@ -362,9 +377,7 @@ def plot_relative_rank_move(network: Field):
 
     title = f"Relative Rank Change Distribution (Network: {network.name})"
     x_label = "Relative Rank Change"
-    y_label = "Number of Alumni"
-
-    bins = [-1 + 0.05 * i for i in range(41)]
+    y_label = "Number of Alumni" if normalized is False else "Number of Alumni (Normalized)"
 
     plt.title(title)
     plt.xlabel(x_label)
@@ -372,7 +385,18 @@ def plot_relative_rank_move(network: Field):
 
     plt.xlim(-1, 1)
 
-    plt.hist(rank_moves, bins=bins)
+    if normalized is True:
+
+        normalized_hist = hist / np.sum(hist)
+
+        plt.ylim(0, max(normalized_hist) + 0.1 if max(normalized_hist) > 0.5 else 0.5)
+
+        plt.bar([x + 0.025 for x in bins[:-1]], normalized_hist, width=np.diff(bins), alpha=0.7, color='blue', edgecolor='black')
+
+    else:
+        plt.bar([x + 0.025 for x in bins[:-1]], hist, width=np.diff(bins), alpha=0.7, color='blue', edgecolor='black')
+
+    # plt.plot(bins_interp, spline(bins_interp), 'r-')
 
     # plt.legend()
 
@@ -586,10 +610,13 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_closed = net.closed
+        net_rand = net.random
 
-        net.set_ranks()
-        net_closed.set_ranks()
+        # net_closed = net.closed
+        # net_closed_rand = net_closed.random
 
-        plot_rank_comparison(net, net_closed)
+        # net.set_ranks()
+        net_rand.set_ranks()
+
+        plot_relative_rank_move(net_rand)
 

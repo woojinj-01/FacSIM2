@@ -61,10 +61,22 @@ class Field():
     def collected(self):    # to be implemented
         pass
 
-    def ranks(self, inverse=False, normalized=False):
+    @property
+    def rank_length(self):
 
-        if (any(not isinstance(arg, bool) for arg in [inverse, normalized])):
-            return None
+        length = 0
+
+        for name in list(self.net.nodes):
+
+            inst = self.inst(name)
+
+            if inst:
+                if (inst['rank']):
+                    length += 1
+
+        return length
+    
+    def ranks(self, inverse=False):
 
         ranks = {}
 
