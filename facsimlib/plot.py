@@ -317,7 +317,7 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     plt.clf()
 
 
-def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
+def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100, normalized=False):
 
     if (not isinstance(network, Field)):
         return None
@@ -351,10 +351,11 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
         return None
 
     if (percent_low == 0 and percent_high == 100):
-        fig_path = f"./fig/rankmove_{network.name}.png"
+        fig_path = f"./fig/rankmove_{network.name}.png" if normalized is False else f"./fig/rankmove_{network.name}_norm.png"
 
     else:
-        fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png"
+        fig_path = f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}.png" if normalized is False \
+            else f"./fig/rankmove_{network.name}_{percent_low}_{percent_high}_norm.png"
 
     rank_moves = []
     
@@ -367,12 +368,8 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
             rank_moves.append(r_move / rank_length)
 
     bins = np.linspace(-1, 1, 40)
-    bins_interp = np.linspace(-1, 1, 1000)
 
-    # Create a histogram
-    hist, bin_edges = np.histogram(rank_moves, bins=bins_interp, density=True)
-
-    spline = make_interp_spline(bin_edges[:-1], hist, k=3)
+    hist, _ = np.histogram(rank_moves, bins=bins)
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
@@ -381,7 +378,7 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
 
     title = f"Relative Rank Change Distribution (Network: {network.name})"
     x_label = "Relative Rank Change"
-    y_label = "Number of Alumni"
+    y_label = "Number of Alumni" if normalized is False else "Number of Alumni (Normalized)"
 
     plt.title(title)
     plt.xlabel(x_label)
@@ -389,7 +386,16 @@ def plot_relative_rank_move(network: Field, percent_low=0, percent_high=100):
 
     plt.xlim(-1, 1)
 
-    plt.hist(rank_moves, bins=bins, density=True, stacked=True)
+    if normalized is True:
+
+        normalized_hist = hist / np.sum(hist)
+
+        plt.ylim(0, max(normalized_hist) + 0.1 if max(normalized_hist) > 0.5 else 0.5)
+
+        plt.bar([x + 0.025 for x in bins[:-1]], normalized_hist, width=np.diff(bins), alpha=0.7, color='blue', edgecolor='black')
+
+    else:
+        plt.bar([x + 0.025 for x in bins[:-1]], hist, width=np.diff(bins), alpha=0.7, color='blue', edgecolor='black')
 
     # plt.plot(bins_interp, spline(bins_interp), 'r-')
 
@@ -577,12 +583,14 @@ if (__name__ == "__main__"):
     for net in network_dict.values():
 
         net_target = net.closed
-        net_rand = net_target.random
 
+        net.set_ranks()
         net_target.set_ranks()
-        net_rand.set_ranks()
+
+        plot_relative_rank_move(net)
+        plot_relative_rank_move(net, normalized=True)
 
         plot_relative_rank_move(net_target)
-        plot_relative_rank_move(net_rand)
+        plot_relative_rank_move(net_target, normalized=True)
     
 
