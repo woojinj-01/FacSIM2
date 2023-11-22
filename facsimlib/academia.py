@@ -61,7 +61,10 @@ class Field():
     def collected(self):    # to be implemented
         pass
 
-    def ranks(self, inverse=False):
+    def ranks(self, inverse=False, normalized=False):
+
+        if (any(not isinstance(arg, bool) for arg in [inverse, normalized])):
+            return None
 
         ranks = {}
 
@@ -78,7 +81,13 @@ class Field():
             else:
                 ranks[inst['rank']] = name
 
-        return ranks
+        if normalized is True:
+            if inverse is True:
+                return {key: value / len(ranks) for key, value in ranks.items()}
+            else:
+                return {key / len(ranks): value for key, value in ranks.items()}
+        else:
+            return ranks    
         
     def inst(self, name):
 
