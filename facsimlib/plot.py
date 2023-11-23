@@ -557,6 +557,7 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
         plt.savefig(fig_path)
         plt.clf()
 
+
 def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
 
     fig_path = f"./fig/rank_comparison_multiple_{network_u.name}.png"
