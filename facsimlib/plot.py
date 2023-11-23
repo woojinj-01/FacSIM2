@@ -296,22 +296,31 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     plt.rc('font', **font)
     plt.figure(figsize=(7, 5), dpi=200)
 
-    title = f"NonKR_{network.name}"
+    title = f"Doctorate Country for Assistant Professors (Network: {network.name})"
     x_label = "Number of Assistant Professors" if normalized is False else "Number of Assistant Professors (Normalized)"
-    y_label = "Rank"
+    y_label = "Rank" if group_size == 1 else f"Group ({group_size} ranks/group)"
 
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
-    plt.barh(x_co, y_co_nonkr, color='#4169E1', label='NonKR AP')
-    plt.barh(x_co, y_co_kr, color='#2E8B57', left=y_co_nonkr, label='KR AP')
+    if normalized:
+        plt.xlim(0, 1)
+        plt.xticks(np.arange(0, 1.1, 0.25))
+
+    plt.yticks(range(1, len(x_co) + 1))
+
+    edge_width = 1 if 15 / len(x_co) > 1 else 15 / len(x_co)
+
+    plt.barh(x_co, y_co_nonkr, color='blue', label='Earned doctorate abroad', alpha=0.7, edgecolor='black', linewidth=edge_width)
+    plt.barh(x_co, y_co_kr, color='green', left=y_co_nonkr, label='Earned doctorate in S.Korea', alpha=0.7, edgecolor='black', linewidth=edge_width)
     
     plt.legend()
 
     plt.gca().invert_yaxis()
 
     plt.savefig(fig_path)
+
     plt.clf()
 
 
@@ -582,9 +591,13 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net.set_ranks()
-        
-        plot_lorentz_curve_out_degree(net)
+        net_closed = net.closed
+        net_closed.set_ranks()
+
+        net.copy_ranks_from(net_closed)
+
+        plot_nonkr_bar(net, group_size=5, normalized=True)
+        plot_nonkr_bar(net, group_size=5, normalized=False)
         
 
     
