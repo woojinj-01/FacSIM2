@@ -51,7 +51,11 @@ class Field():
 
     @property
     def closed(self):
-        return self.filter("country_code", "KR")
+
+        self_closed = self.filter("country_code", "KR")
+        self_closed.name = f"Closed {self.name}"
+
+        return self_closed
     
     @property
     def random(self):
