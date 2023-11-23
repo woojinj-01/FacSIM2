@@ -59,7 +59,10 @@ class Field():
     
     @property
     def random(self):
-        return self.randomize()[0]
+        self_random = self.randomize()[0]
+        self_random.name = f"Random {self.name}"
+
+        return self_random
     
     @property
     def collected(self):    # to be implemented
