@@ -13,7 +13,8 @@ def plot_lorentz_curve_out_degree_integrated(network_list):
     network_names = [net.name for net in network_list]
     div_10per = [i for i in range(0, 101, 20)]
 
-    colors = ['#4169E1', '#2E8B57', '#C71585']
+    # colors = ['#4169E1', '#2E8B57', '#C71585']
+    colors = ['green', 'blue', 'red']
     color_ptr = 0
 
     fig_path = f"./fig/lc_integrated_{'_'.join(network_names)}.png"
@@ -40,11 +41,11 @@ def plot_lorentz_curve_out_degree_integrated(network_list):
 
         (gini_coeff, x_co, y_co, base_co) = _process_gini_coeff(out_degrees)
 
-        plt.plot(x_co, y_co, color=colors[color_ptr], linewidth=1.5, label=net.name)
+        plt.plot(x_co, y_co, color=colors[color_ptr], linewidth=0.7, label=net.name, alpha=0.7)
         plt.scatter(div_10per, [_sample_from_data(x_co, y_co, index) for index in div_10per], \
-                    c=colors[color_ptr], s=20, clip_on=False, alpha=1)
+                    c=colors[color_ptr], s=10, clip_on=False, alpha=1, marker='s')
 
-        plt.plot(base_co, base_co, color='black', linewidth=1)
+        plt.plot(base_co, base_co, color='black', linewidth=0.7)
 
         color_ptr += 1
 
@@ -574,6 +575,8 @@ if (__name__ == "__main__"):
     prep_list = facsimlib.processing.preprocess("data")
     network_dict = {}
 
+    networks_closed = []
+
     for field, df_list in prep_list:
 
         network_dict[field] = Field(field)
@@ -581,18 +584,16 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_target = net.closed
+        net_closed = net.closed
 
         net.set_ranks()
-        net_target.set_ranks()
+        net_closed.set_ranks()
 
-        plot_relative_rank_move(net)
+        networks_closed.append(net_closed)
 
-        plot_relative_rank_move(net, normalized=True)
-
-        plot_relative_rank_move(net_target)
-
-        plot_relative_rank_move(net_target, normalized=True)
+    plot_lorentz_curve_out_degree_integrated(list(network_dict.values()))
+    plot_lorentz_curve_out_degree_integrated(networks_closed)
+        
 
     
 
