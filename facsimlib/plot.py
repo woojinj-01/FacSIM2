@@ -79,14 +79,12 @@ def plot_lorentz_curve_out_degree(network):
     plt.xlim(0, 100)
     plt.ylim(0, 100)
 
-    plt.plot(x_co, y_co, linewidth=1.5)
+    plt.plot(x_co, y_co, linewidth=0.7, alpha=0.7, c='blue')
     plt.scatter(div_10per, [_sample_from_data(x_co, y_co, index) for index in div_10per], \
-                c='#4169E1', s=20, clip_on=False, alpha=1)
-    plt.plot(base_co, base_co, color='black', linewidth=1)
+                c='blue', s=10, clip_on=False, alpha=1, marker='s')
+    plt.plot(base_co, base_co, color='black', linewidth=0.7)
 
-    plt.fill_between(x_co, y_co, base_co, alpha=0.2, color='grey')
-
-    plt.text(60, 40, str(gini_coeff), color='black', fontsize=7)
+    # plt.fill_between(x_co, y_co, base_co, alpha=0.2, color='grey')
 
     plt.savefig(fig_path)
     plt.clf()
@@ -584,15 +582,9 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_closed = net.closed
-
         net.set_ranks()
-        net_closed.set_ranks()
-
-        networks_closed.append(net_closed)
-
-    plot_lorentz_curve_out_degree_integrated(list(network_dict.values()))
-    plot_lorentz_curve_out_degree_integrated(networks_closed)
+        
+        plot_lorentz_curve_out_degree(net)
         
 
     
