@@ -475,73 +475,44 @@ def plot_up_down_hires(network_list, normalized: bool = False):
     plt.clf()
 
 
-def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
+def plot_relative_rank_difference(network_u: Field, network_v: Field):
+    pass
 
-    if not isinstance(network_u, Field) or not isinstance(network_v, Field):
-        return None
-    elif not isinstance(normalized, bool):
-        return None
 
-    if normalized:
-        fig_path = f"./fig/rank_comparison_normalized_{network_u.name}_{network_v.name}.png"
-    else:
-        fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.png"
+def plot_rank_comparison(network_u: Field, network_v: Field):
+
+    fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.png"
     
-    (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v, normalized)
+    (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v)
 
-    max_rank_u = len(network_u.ranks()) if normalized is False else 1 
-    max_rank_v = len(network_v.ranks()) if normalized is False else 1
+    max_rank_u = len(network_u.ranks())
+    max_rank_v = len(network_v.ranks())
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
     plt.rc('font', **font)
     plt.figure(figsize=(7, 5), dpi=200)
 
-    if normalized:
+    plt.xlim(1, max_rank_u)
+    plt.ylim(1, max_rank_v)
 
-        plt.xlim(0, 1)
-        plt.ylim(0, 1)
+    plt.xticks(range(1, max_rank_u + 1, 50))
+    plt.yticks(range(1, max_rank_v + 1, 50))
 
-        plt.xticks(np.arange(0, 1.1, 0.25))
-        plt.yticks(np.arange(0, 1.1, 0.25))
+    title = "Rank Comparison"
+    x_label = f"Rank (Network: {network_u.name})"
+    y_label = f"Rank (Network: {network_v.name})"
 
-        title = "Rank Comparison"
-        x_label = f"Normalized Rank (Network: {network_u.name})"
-        y_label = f"Normalized Rank (Network: {network_v.name})"
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
 
-        plt.title(title)
-        plt.xlabel(x_label)
-        plt.ylabel(y_label)
+    plt.scatter(rank_common_u, rank_common_v, s=20, marker='x', c='#4169E1')
 
-        plt.scatter(rank_common_u, rank_common_v, s=20, marker='x', c='#4169E1')
+    plt.plot([1, max_rank_u], [1, max_rank_v], c='black', linewidth=0.5)
 
-        plt.plot([0, 1], [0, 1], c='black', linewidth=0.5)
-
-        plt.savefig(fig_path)
-        plt.clf()
-    
-    else:
-        
-        plt.xlim(1, max_rank_u)
-        plt.ylim(1, max_rank_v)
-
-        plt.xticks(range(1, max_rank_u + 1, math.floor(max_rank_u / 4)))
-        plt.yticks(range(1, max_rank_v + 1, math.floor(max_rank_v / 4)))
-
-        title = "Rank Comparison"
-        x_label = f"Rank (Network: {network_u.name})"
-        y_label = f"Rank (Network: {network_v.name})"
-
-        plt.title(title)
-        plt.xlabel(x_label)
-        plt.ylabel(y_label)
-
-        plt.scatter(rank_common_u, rank_common_v, s=20, marker='x', c='#4169E1')
-
-        plt.plot([1, max_rank_u], [1, max_rank_v], c='black', linewidth=0.5)
-
-        plt.savefig(fig_path)
-        plt.clf()
+    plt.savefig(fig_path)
+    plt.clf()
 
 
 def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
@@ -610,13 +581,18 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_rand = net.random
+        net_target = net.closed
 
-        # net_closed = net.closed
-        # net_closed_rand = net_closed.random
+        net.set_ranks()
+        net_target.set_ranks()
 
-        # net.set_ranks()
-        net_rand.set_ranks()
+        plot_relative_rank_move(net)
 
-        plot_relative_rank_move(net_rand)
+        plot_relative_rank_move(net, normalized=True)
+
+        plot_relative_rank_move(net_target)
+
+        plot_relative_rank_move(net_target, normalized=True)
+
+    
 

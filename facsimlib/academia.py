@@ -76,7 +76,7 @@ class Field():
 
         return length
     
-    def ranks(self, inverse=False):
+    def ranks(self, inverse=False, normalized=False):
 
         ranks = {}
 
