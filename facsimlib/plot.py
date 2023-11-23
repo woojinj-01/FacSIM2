@@ -458,14 +458,14 @@ def plot_up_down_hires(network_list, normalized: bool = False):
             self_hires_co.append(se / total)
             down_hires_co.append(down / total)
 
-    colors = ['#4169E1', '#2E8B57', '#C71585']
+    # colors = ['#4169E1', '#2E8B57', '#C71585']
 
     font = {'family': 'Helvetica Neue', 'size': 9}
 
     plt.rc('font', **font)
     plt.figure(figsize=(7, 5), dpi=200)
 
-    title = "Type of hires" if normalized is False else "Type of hires (Normalized)"
+    title = "Distribution of Hires"
     x_label = "Network"
     y_label = "Hires" if normalized is False else "Hires (Normalized)"
 
@@ -473,13 +473,19 @@ def plot_up_down_hires(network_list, normalized: bool = False):
     plt.xlabel(x_label)
     plt.ylabel(y_label)
 
-    plt.bar(network_names, down_hires_co, color=colors[0], label='Down hires')
-    plt.bar(network_names, self_hires_co, color=colors[1], bottom=down_hires_co, label='Self hires')
-    plt.bar(network_names, up_hires_co, color=colors[2], bottom=[down_hires_co[i] + self_hires_co[i] for i in range(len(down_hires_co))], label='Up hires')
+    if normalized:
+        plt.ylim(0, 1)
+        plt.yticks(np.arange(0, 1.1, 0.25))
+
+    plt.bar(network_names, down_hires_co, color='blue', label='Down hires', alpha=0.7, edgecolor='black')
+    plt.bar(network_names, self_hires_co, color='red', bottom=down_hires_co, label='Self hires', alpha=0.7, edgecolor='black')
+    plt.bar(network_names, up_hires_co, color='green', bottom=[down_hires_co[i] + self_hires_co[i] for i in range(len(down_hires_co))], \
+            label='Up hires', alpha=0.7, edgecolor='black')
 
     plt.legend()
 
     plt.savefig(fig_path)
+    
     plt.clf()
 
 
@@ -582,7 +588,7 @@ if (__name__ == "__main__"):
     prep_list = facsimlib.processing.preprocess("data")
     network_dict = {}
 
-    networks_closed = []
+    net_list = []
 
     for field, df_list in prep_list:
 
@@ -591,13 +597,13 @@ if (__name__ == "__main__"):
 
     for net in network_dict.values():
 
-        net_closed = net.closed
-        net_closed.set_ranks()
+        net_rand = net.random
+        net_rand.set_ranks()
 
-        net.copy_ranks_from(net_closed)
+        net_list.append(net_rand)
 
-        plot_nonkr_bar(net, group_size=5, normalized=True)
-        plot_nonkr_bar(net, group_size=5, normalized=False)
+    plot_up_down_hires(net_list, normalized=True)
+    plot_up_down_hires(net_list)
         
 
     
