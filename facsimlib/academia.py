@@ -1,5 +1,3 @@
-import types
-from typing import Any
 import networkx as nx
 import facsimlib.SpringRank as sp
 from facsimlib.text import get_country_code, get_region, normalize_inst_name
