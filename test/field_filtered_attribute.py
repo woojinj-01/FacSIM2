@@ -23,13 +23,13 @@ if (__name__ == "__main__"):
 
     networks = construct_network()
 
-    net_bio = networks["Biology"]
+    net_bio: Field = networks["Biology"]
 
-    net_bio_filt = net_bio.closed
+    net_bio_filt = net_bio.filter('country_code', ['KR', 'US'], 'in')
 
     print(net_bio_filt)
 
-    print(net_bio_filt.net.nodes[kaist])
+    # print(net_bio_filt.net.nodes[kaist])
     
     for edge in net_bio_filt.net.edges(data=True):
         print(edge)
