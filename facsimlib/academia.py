@@ -1,3 +1,5 @@
+import types
+from typing import Any
 import networkx as nx
 import facsimlib.SpringRank as sp
 from facsimlib.text import get_country_code, get_region, normalize_inst_name
@@ -6,6 +8,46 @@ from copy import deepcopy
 from random import shuffle
 import numpy as np
 import pandas as pd
+
+
+class NodeSelect:
+    def __init__(self, key, value, op) -> None:
+        
+        op_allowed = ['=', 'in', '!in']
+
+        if op not in op_allowed:
+            return None
+        
+        self.opset = set([(key, value, op)])
+
+    def __and__(self, other):
+
+        new_ns = deepcopy(self)
+        
+        new_ns.opset = new_ns.opset.intersection(other.opset)
+
+        return new_ns
+
+    def __or__(self, other):
+        
+        new_ns = deepcopy(self)
+        
+        new_ns.opset = new_ns.opset.union(other.opset)
+
+        return new_ns
+
+    def __sub__(self, other):
+
+        new_ns = deepcopy(self)
+        
+        new_ns.opset = new_ns.opset.difference(other.opset)
+
+        return new_ns
+        
+
+class EdgeSelect:
+    def __init__(self, key, value, op) -> None:
+        pass
 
 
 class Field():
@@ -319,7 +361,7 @@ class Field():
         return df.to_csv(path, sep='\t', index=False)
     
 
-class Institution():
+class Institution:
     def __init__(self, inst_name: str) -> None:
 
         self.name = inst_name
@@ -358,7 +400,7 @@ class Institution():
         return result
     
     
-class Move():
+class Move:
     def __init__(self, inst_name_u: str, inst_name_v: str) -> None:
         
         self.u_name = inst_name_u
