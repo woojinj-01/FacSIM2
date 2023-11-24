@@ -268,7 +268,7 @@ class Field():
         nodes_to_remove = []
 
         for node in net_filtered.nodes():
-            if not select.hit(node):
+            if not select.hit(net_filtered.nodes[node]):
 
                 nodes_to_remove.append(node)
 
