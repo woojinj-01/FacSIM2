@@ -40,7 +40,10 @@ class NodeSelect:
     
     def hit(self, node):
 
+        print(node)
+
         if self.key not in node:
+            print("No Key")
             return False
 
         target = node[self.key]
@@ -111,7 +114,9 @@ class Field():
     @property
     def closed(self):
 
-        self_closed = self.filter("country_code", "KR")
+        select = NodeSelect("country_code", "KR", "=")
+
+        self_closed = self.filter(select)
         self_closed.name = f"Closed {self.name}"
 
         return self_closed
@@ -270,55 +275,7 @@ class Field():
         for node in nodes_to_remove:
             net_filtered.remove_node(node)
 
-        return Field(f"Filtered {self.name} ({key} = {value})", net_filtered)
-    
-    def _filter_equals(self, key, value):
-        
-        net_filtered = deepcopy(self.net)
-
-        nodes_to_remove = []
-
-        for node in net_filtered.nodes():
-            if key in net_filtered.nodes[node] and net_filtered.nodes[node][key] != value:
-
-                nodes_to_remove.append(node)
-
-        for node in nodes_to_remove:
-            net_filtered.remove_node(node)
-
-        return Field(f"Filtered {self.name} ({key} = {value})", net_filtered)
-
-    def _filter_containing(self, key, value):
-        
-        net_filtered = deepcopy(self.net)
-
-        nodes_to_remove = []
-
-        for node in net_filtered.nodes():
-            if key in net_filtered.nodes[node] and net_filtered.nodes[node][key] not in value:
-
-                nodes_to_remove.append(node)
-
-        for node in nodes_to_remove:
-            net_filtered.remove_node(node)
-
-        return Field(f"Filtered {self.name} ({key} in {value})", net_filtered)
-    
-    def _filter_not_containing(self, key, value):
-        
-        net_filtered = deepcopy(self.net)
-
-        nodes_to_remove = []
-
-        for node in net_filtered.nodes():
-            if key in net_filtered.nodes[node] and net_filtered.nodes[node][key] in value:
-
-                nodes_to_remove.append(node)
-
-        for node in nodes_to_remove:
-            net_filtered.remove_node(node)
-
-        return Field(f"Filtered {self.name} ({key} not in {value})", net_filtered)
+        return Field(f"Filtered {self.name} ({select})", net_filtered)
     
     def randomize(self, times=1):
 
