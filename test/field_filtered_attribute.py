@@ -25,7 +25,7 @@ if (__name__ == "__main__"):
 
     net_bio: Field = networks["Biology"]
 
-    net_bio_filt = net_bio.filter('country_code', ['KR', 'US'], 'in')
+    net_bio_filt = net_bio.filter('country_code', ['KR'], '!in')
 
     print(net_bio_filt)
 

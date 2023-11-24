@@ -1,9 +1,9 @@
 import networkx as nx
 import facsimlib.SpringRank as sp
-from facsimlib.text import get_country_code, normalize_inst_name
+from facsimlib.text import get_country_code, get_region, normalize_inst_name
 
 from copy import deepcopy
-from random import choice, shuffle
+from random import shuffle
 import numpy as np
 import pandas as pd
 
@@ -324,6 +324,8 @@ class Institution():
 
         self.name = inst_name
         self.field = None
+
+        self.region = get_region(inst_name)
         self.country_code = get_country_code(inst_name)
 
     def __repr__(self) -> str:

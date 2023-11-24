@@ -151,6 +151,16 @@ def get_country_code(text):
     return text_normalized.split(',')[2]
 
 
+def get_region(text):
+
+    text_normalized = normalize_inst_name(text)
+
+    if (text_normalized is None):
+        return None
+    
+    return text_normalized.split(',')[1]
+
+
 if (__name__ == "__main__"):
 
     target = ["KAIST, Daejeon, kR", "University of Chicago, Chicago", "Yonsei University,,KR"]
