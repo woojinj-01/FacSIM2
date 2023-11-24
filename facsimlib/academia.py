@@ -17,60 +17,49 @@ class NodeSelect:
 
         if op not in op_allowed:
             return None
+
+        self.key = key
+        self.value = value
+        self.op = op
+
+    def __repr__(self) -> str:
         
-        self.opset = set([(key, value, op)])
+        match self.op:
 
-    def __and__(self, other):
+            case '=':
+                return f"{self.key} = {self.value}"
 
-        new_ns = deepcopy(self)
-        
-        new_ns.opset = new_ns.opset.intersection(other.opset)
+            case 'in':
+                return f"{self.key} in {self.value}"
 
-        return new_ns
-
-    def __or__(self, other):
-        
-        new_ns = deepcopy(self)
-        
-        new_ns.opset = new_ns.opset.union(other.opset)
-
-        return new_ns
-
-    def __sub__(self, other):
-
-        new_ns = deepcopy(self)
-        
-        new_ns.opset = new_ns.opset.difference(other.opset)
-
-        return new_ns
+            case '!in':
+                return f"{self.key} not in {self.value}"
+            
+            case _:
+                return "Invalid"
     
     def hit(self, node):
 
-        for key, value, op in self.opset:
+        if self.key not in node:
+            return False
 
-            target = node[key]
+        target = node[self.key]
 
-            match op:
+        match self.op:
 
-                case '=':
-                    if target == value:
-                        continue
-                    else:
-                        return False
+            case '=':
+                if target == self.value:
+                    return True
 
-                case 'in':
-                    if target in value:
-                        continue
-                    else:
-                        return False
+            case 'in':
+                if target in self.value:
+                    return True
 
-                case '!in':
-                    if target not in value:
-                        continue
-                    else:
-                        return False
+            case '!in':
+                if target not in self.value:
+                    return True
 
-        return True
+        return False
         
 
 class EdgeSelect:
@@ -267,22 +256,21 @@ class Field():
 
         return self
 
-    def filter(self, key, value, op='='):
+    def filter(self, select: NodeSelect):
 
-        op_allowed = ['=', 'in', '!in']
-        
-        if op not in op_allowed:
-            return None
-        
-        match op:
-            case '=':
-                return self._filter_equals(key, value)
+        net_filtered = deepcopy(self.net)
 
-            case 'in':
-                return self._filter_containing(key, value)
-            
-            case '!in':
-                return self._filter_not_containing(key, value)
+        nodes_to_remove = []
+
+        for node in net_filtered.nodes():
+            if not select.hit(node):
+
+                nodes_to_remove.append(node)
+
+        for node in nodes_to_remove:
+            net_filtered.remove_node(node)
+
+        return Field(f"Filtered {self.name} ({key} = {value})", net_filtered)
     
     def _filter_equals(self, key, value):
         
