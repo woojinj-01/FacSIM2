@@ -43,6 +43,34 @@ class NodeSelect:
         new_ns.opset = new_ns.opset.difference(other.opset)
 
         return new_ns
+    
+    def hit(self, node):
+
+        for key, value, op in self.opset:
+
+            target = node[key]
+
+            match op:
+
+                case '=':
+                    if target == value:
+                        continue
+                    else:
+                        return False
+
+                case 'in':
+                    if target in value:
+                        continue
+                    else:
+                        return False
+
+                case '!in':
+                    if target not in value:
+                        continue
+                    else:
+                        return False
+
+        return True
         
 
 class EdgeSelect:
