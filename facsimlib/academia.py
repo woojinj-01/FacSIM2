@@ -27,7 +27,7 @@ class NodeSelect:
         match self.op:
 
             case '=':
-                return f"{self.key} = {self.value}"
+                return f"{self.key}={self.value}"
 
             case 'in':
                 return f"{self.key} in {self.value}"
@@ -40,10 +40,7 @@ class NodeSelect:
     
     def hit(self, node):
 
-        print(node)
-
         if self.key not in node:
-            print("No Key")
             return False
 
         target = node[self.key]
