@@ -428,35 +428,11 @@ def plot_up_down_hires(network_list, normalized: bool = False):
 
     for net in network_list:
 
-        stat = facsimlib.math.up_down_hires(net)
+        stat = facsimlib.math.up_down_hires(net, normalized=normalized)
 
         up_hires.append(stat[0])
         self_hires.append(stat[1])
         down_hires.append(stat[2])
-
-    if (normalized is False):
-        
-        up_hires_co = up_hires
-        self_hires_co = self_hires
-        down_hires_co = down_hires
-
-    else:
-
-        up_hires_co = []
-        self_hires_co = []
-        down_hires_co = []
-
-        for i in range(len(up_hires)):
-
-            up = up_hires[i]
-            se = self_hires[i]
-            down = down_hires[i]
-
-            total = up + se + down
-
-            up_hires_co.append(up / total)
-            self_hires_co.append(se / total)
-            down_hires_co.append(down / total)
 
     # colors = ['#4169E1', '#2E8B57', '#C71585']
 
@@ -477,15 +453,88 @@ def plot_up_down_hires(network_list, normalized: bool = False):
         plt.ylim(0, 1)
         plt.yticks(np.arange(0, 1.1, 0.25))
 
-    plt.bar(network_names, down_hires_co, color='blue', label='Down hires', alpha=0.7, edgecolor='black')
-    plt.bar(network_names, self_hires_co, color='red', bottom=down_hires_co, label='Self hires', alpha=0.7, edgecolor='black')
-    plt.bar(network_names, up_hires_co, color='green', bottom=[down_hires_co[i] + self_hires_co[i] for i in range(len(down_hires_co))], \
+    plt.bar(network_names, down_hires, color='blue', label='Down hires', alpha=0.7, edgecolor='black')
+    plt.bar(network_names, self_hires, color='red', bottom=down_hires, label='Self hires', alpha=0.7, edgecolor='black')
+    plt.bar(network_names, up_hires, color='green', bottom=[down_hires[i] + self_hires[i] for i in range(len(down_hires))], \
             label='Up hires', alpha=0.7, edgecolor='black')
 
     plt.legend()
 
     plt.savefig(fig_path)
     
+    plt.clf()
+
+
+def plot_up_down_hires_zscore_random(network_src_list, trial=500):
+
+    network_names = [net.name for net in network_src_list]
+
+    fig_path = f"./fig/hires_updown_zscore_{'_'.join(network_names)}.png"
+
+    z_dict = {}
+
+    for net_src in network_src_list:
+
+        net_src.set_ranks()
+
+        up_hires_rand = []
+        self_hires_rand = []
+        down_hires_rand = []
+
+        (up_src, self_src, down_src) = facsimlib.math.up_down_hires(net_src)
+
+        net_src_rand = net_src.randomize(trial)
+
+        for net_rand in net_src_rand:
+
+            net_rand.set_ranks()
+
+            (up, se, do) = facsimlib.math.up_down_hires(net_rand)
+
+            up_hires_rand.append(up)
+            self_hires_rand.append(se)
+            down_hires_rand.append(do)
+
+        up_z = (up_src - np.mean(up_hires_rand)) / np.std(up_hires_rand)
+        self_z = (self_src - np.mean(self_hires_rand)) / np.std(self_hires_rand)
+        down_z = (down_src - np.mean(down_hires_rand)) / np.std(down_hires_rand)
+
+        z_dict[net_src.name] = (up_z, self_z, down_z)
+
+    font = {'family': 'Helvetica Neue', 'size': 9}
+
+    plt.rc('font', **font)
+    plt.figure(figsize=(7, 5), dpi=200)
+
+    title = f"Z-Score of Hires (v.s. Random {trial} trials)"
+    x_label = "Category"
+    y_label = "Z-Score"
+
+    # Set the width of the bars
+    bar_width = 0.25
+
+    # Adjust x positions for each set of bars
+    x_positions1 = np.arange(len(network_names))
+    x_positions2 = [x + bar_width for x in x_positions1]
+    x_positions3 = [x + 2 * bar_width for x in x_positions1]
+
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    plt.xticks([x + bar_width for x in x_positions1], network_names)
+
+    plt.bar(x_positions1, [z[0] for z in z_dict.values()], width=bar_width, label="Up hires", color='green', alpha=0.7, edgecolor='black')
+    plt.bar(x_positions2, [z[1] for z in z_dict.values()], width=bar_width, label="Self hires", color='blue', alpha=0.7, edgecolor='black')
+    plt.bar(x_positions3, [z[2] for z in z_dict.values()], width=bar_width, label="Down hires", color='red', alpha=0.7, edgecolor='black')
+
+    plt.axhline(0, color='black', linewidth=1)
+
+    plt.legend()
+
+    plt.savefig(fig_path)
+    plt.show()
+
     plt.clf()
 
 
@@ -614,25 +663,15 @@ def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
 
 if (__name__ == "__main__"):
 
-    prep_list = facsimlib.processing.preprocess("data")
-    network_dict = {}
+    network_dict = facsimlib.processing.construct_network()
 
-    net_list = []
+    trial = 20
 
-    for field, df_list in prep_list:
+    plot_up_down_hires_zscore_random(list(network_dict.values()))
 
-        network_dict[field] = Field(field)
-        facsimlib.processing.process_file(df_list, network_dict[field])
+    net_closed = [net.closed.set_ranks() for net in network_dict.values()]
 
-    for net in network_dict.values():
-
-        net_rand = net.random
-        net_rand.set_ranks()
-
-        net_list.append(net_rand)
-
-    plot_up_down_hires(net_list, normalized=True)
-    plot_up_down_hires(net_list)
+    plot_up_down_hires_zscore_random(net_closed)
         
 
     

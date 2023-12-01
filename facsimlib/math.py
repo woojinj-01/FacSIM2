@@ -115,7 +115,7 @@ def average_relative_rank_move(network: Field):
     return sum(rank_moves) / len(rank_moves)
 
 
-def up_down_hires(network: Field):
+def up_down_hires(network: Field, normalized: bool = False):
 
     if (not isinstance(network, Field)):
         return None
@@ -144,7 +144,14 @@ def up_down_hires(network: Field):
         else:
             pass
 
-    return (up_hire, self_hire, down_hire)
+    if normalized is False:
+
+        return (up_hire, self_hire, down_hire)
+    
+    else:
+        total_hire = up_hire + self_hire + down_hire
+
+        return (up_hire / total_hire, self_hire / total_hire, down_hire / total_hire)
 
 
 if (__name__ == "__main__"):
