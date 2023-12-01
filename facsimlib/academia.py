@@ -9,7 +9,7 @@ import pandas as pd
 
 
 class NodeSelect:
-    def __init__(self, key, value, op) -> None:
+    def __init__(self, key, value, op, label=None) -> None:
         
         op_allowed = ['=', 'in', '!in']
 
@@ -19,6 +19,8 @@ class NodeSelect:
         self.key = key
         self.value = value
         self.op = op
+
+        self.label = label
 
     def __repr__(self) -> str:
         

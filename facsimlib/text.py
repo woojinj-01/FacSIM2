@@ -8,6 +8,25 @@ typo_history_path = "./typo_history.ini"
 length_compare_threshold = 3
 hamming_dist_threshold = 0.25
 
+area_seoul = ['seoul']
+
+area_capital = ['hwaseong', 'bucheon', 'suwon', 'ansan',
+                'songdo', 'anseong', 'osan', 'yongin',
+                'goyang', 'anyang', 'incheon', 'gyeonggi-do',
+                'seongnam', '_x0008_suwon']
+
+area_others = ['miryang', 'pohang', 'daegu', 'jeonju',
+               'changwon', 'asan', 'gunsan', 'yeongju',
+               'jeju', 'gongju', 'gwangju', 'goesan',
+               'jecheon', 'chuncheon', 'daejeon', 'kyungsan',
+               'gumi', 'ulsan', 'masan', 'muan',
+               'cheongju', 'yeosu', 'busan', 'wonju',
+               'cheonan', 'chuncheon-si', 'kunsan', 'sejong',
+               'gyeongsan', 'jinju', 'suncheon', 'gangneung',
+               'mokpo', 'cheonanl', 'sunchon', 'chungju',
+               'gyeongju', 'kongju', 'andong', 'pusan',
+               'gimhae', 'iksan', 'namwon']
+
 
 def are_similar_texts(str_1, str_2):    # str_2 is reference (more reliable)
 

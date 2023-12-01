@@ -4,8 +4,8 @@ import math
 
 import facsimlib.processing
 import facsimlib.math
-from facsimlib.academia import Field
-from facsimlib.text import get_country_code, normalize_inst_name
+from facsimlib.academia import Field, NodeSelect as NS
+from facsimlib.text import get_country_code, normalize_inst_name, area_seoul, area_capital, area_others
 
 
 def plot_lorentz_curve_out_degree_integrated(network_list):
@@ -323,6 +323,98 @@ def plot_nonkr_bar(network: Field, num_group: int = 10, normalized: bool = False
     plt.barh(x_co, y_co_nonkr, color='blue', label='Earned doctorate abroad', alpha=0.7, edgecolor='black', linewidth=edge_width)
     plt.barh(x_co, y_co_kr, color='green', left=y_co_nonkr, label='Earned doctorate in S.Korea', alpha=0.7, edgecolor='black', linewidth=edge_width)
     
+    plt.legend()
+
+    plt.gca().invert_yaxis()
+
+    plt.savefig(fig_path)
+
+    plt.clf()
+
+
+def plot_nonkr_bar_select(network: Field, selects: list, normalized: bool = False):  # clustering should be implemented
+
+    if (not isinstance(network, Field)):
+        return False
+    elif (any(not isinstance(sel, NS) for sel in selects)):
+        return False
+    elif (normalized not in [False, True]):
+        return False
+
+    str_list = []
+
+    str_list.append(f"./fig/nonkr_select_{network.name}_{'_'.join([sel.label for sel in selects])}")
+    
+    if (normalized is True):
+        str_list.append("Norm")
+    
+    fig_path = "_".join(str_list) + ".png"
+
+    total_count = {}
+    kr_count = {}
+
+    for ns in selects:
+
+        total_count[ns.__repr__()] = 0
+        kr_count[ns.__repr__()] = 0
+
+    for node in network.net.nodes():
+
+        selects_hit = []
+
+        for ns in selects:
+            if ns.hit(network.net.nodes[node]):
+                selects_hit.append(ns.__repr__())
+
+        edges_in = network.net.in_edges(node, data=True)
+
+        for _, _, data in edges_in:
+
+            for ns_repr in selects_hit:
+                total_count[ns_repr] += 1
+
+            if (get_country_code(data['u_name']) == 'KR'):
+
+                for ns_repr in selects_hit:
+                    kr_count[ns_repr] += 1
+
+    nonkr_count = {ns_repr: total_count[ns_repr] - kr_count[ns_repr] for ns_repr in list(total_count.keys())}
+
+    x_co = [ns.label if ns.label is not None else ns.__repr__() for ns in selects]
+    y_co_kr = [value for _, value in sorted(kr_count.items())]
+    y_co_nonkr = [value for _, value in sorted(nonkr_count.items())]
+
+    if (normalized is True):
+            
+        y_co_kr_norm = [y_co_kr[i] / (y_co_kr[i] + y_co_nonkr[i]) if (y_co_kr[i] + y_co_nonkr[i]) != 0 else 0 for i in range(len(x_co))]
+        y_co_nonkr_norm = [y_co_nonkr[i] / (y_co_kr[i] + y_co_nonkr[i]) if (y_co_kr[i] + y_co_nonkr[i]) != 0 else 0 for i in range(len(x_co))]
+
+        y_co_kr = y_co_kr_norm
+        y_co_nonkr = y_co_nonkr_norm
+
+    font = {'family': 'Helvetica Neue', 'size': 9}
+
+    plt.rc('font', **font)
+    plt.figure(figsize=(7, 5), dpi=200)
+
+    title = f"Doctorate Country for Assistant Professors (Network: {network.name})"
+    x_label = "Number of Assistant Professors" if normalized is False else "Number of Assistant Professors (Normalized)"
+    y_label = "Category"
+
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+
+    if normalized:
+        plt.xlim(0, 1)
+        plt.xticks(np.arange(0, 1.1, 0.25))
+
+    edge_width = 1 if 15 / len(x_co) > 1 else 15 / len(x_co)
+
+    plt.barh(x_co, y_co_nonkr, color='blue', label='Earned doctorate abroad', alpha=0.7, edgecolor='black', linewidth=edge_width)
+    plt.barh(x_co, y_co_kr, color='green', left=y_co_nonkr, label='Earned doctorate in S.Korea', alpha=0.7, edgecolor='black', linewidth=edge_width)
+    
+    print(x_co)
     plt.legend()
 
     plt.gca().invert_yaxis()
@@ -672,12 +764,14 @@ if (__name__ == "__main__"):
 
     network_dict = facsimlib.processing.construct_network()
 
+    selects = [NS('region', area_seoul, 'in', "Seoul"),
+               NS('region', area_capital, 'in', "Capital area"),
+               NS('region', area_others, 'in', "Others")]
+
     for net in network_dict.values():
 
-        net.copy_ranks_from(net.closed.set_ranks())
-
-        plot_nonkr_bar(net, normalized=True)
-        plot_nonkr_bar(net)
+        plot_nonkr_bar_select(net, selects, normalized=True)
+        plot_nonkr_bar_select(net, selects)
 
         
 
