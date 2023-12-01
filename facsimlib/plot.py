@@ -533,7 +533,6 @@ def plot_up_down_hires_zscore_random(network_src_list, trial=500):
     plt.legend()
 
     plt.savefig(fig_path)
-    plt.show()
 
     plt.clf()
 
