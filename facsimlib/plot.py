@@ -200,11 +200,11 @@ def _sample_from_data(x_co, y_co, x_co_sample):
     return line_eq(x_co_sample)
 
 
-def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False):  # clustering should be implemented
+def plot_nonkr_bar(network: Field, num_group: int = 10, normalized: bool = False):  # clustering should be implemented
 
     if (not isinstance(network, Field)):
         return False
-    elif (not isinstance(group_size, int) or group_size <= 0):
+    elif (not isinstance(num_group, int) or num_group <= 0):
         return False
     elif (normalized not in [False, True]):
         return False
@@ -212,9 +212,8 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     str_list = []
 
     str_list.append(f"./fig/nonkr_{network.name}")
-    
-    if (group_size > 1):
-        str_list.append(f"Group{group_size}")
+
+    str_list.append(f"{num_group} Groups")
     
     if (normalized is True):
         str_list.append("Norm")
@@ -247,6 +246,8 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
     kr_count_sorted = [value for _, value in sorted(kr_count.items())]
     nonkr_count_sorted = [value for _, value in sorted(nonkr_count.items())]
 
+    group_size = np.floor(len(ranks_sorted) / num_group)
+
     if (group_size == 1):
 
         x_co = ranks_sorted
@@ -262,7 +263,7 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
         index = 0
         group_id = 1
 
-        while index < len(ranks_sorted):
+        while index < num_group * group_size:
 
             elements_kr = []
             elements_nonkr = []
@@ -283,6 +284,13 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
 
             group_id += 1
 
+        while index < len(ranks_sorted):
+
+            y_co_kr[-1] += kr_count_sorted[index]
+            y_co_nonkr[-1] += nonkr_count_sorted[index]
+
+            index += 1
+
     if (normalized is True):
             
         y_co_kr_norm = [y_co_kr[i] / (y_co_kr[i] + y_co_nonkr[i]) if (y_co_kr[i] + y_co_nonkr[i]) != 0 else 0 for i in range(len(x_co))]
@@ -298,7 +306,7 @@ def plot_nonkr_bar(network: Field, group_size: int = 1, normalized: bool = False
 
     title = f"Doctorate Country for Assistant Professors (Network: {network.name})"
     x_label = "Number of Assistant Professors" if normalized is False else "Number of Assistant Professors (Normalized)"
-    y_label = "Rank" if group_size == 1 else f"Group ({group_size} ranks/group)"
+    y_label = "Rank" if group_size == 1 else "Group"
 
     plt.title(title)
     plt.xlabel(x_label)
@@ -664,13 +672,13 @@ if (__name__ == "__main__"):
 
     network_dict = facsimlib.processing.construct_network()
 
-    trial = 20
+    for net in network_dict.values():
 
-    plot_up_down_hires_zscore_random(list(network_dict.values()))
+        net.copy_ranks_from(net.closed.set_ranks())
 
-    net_closed = [net.closed.set_ranks() for net in network_dict.values()]
+        plot_nonkr_bar(net, normalized=True)
+        plot_nonkr_bar(net)
 
-    plot_up_down_hires_zscore_random(net_closed)
         
 
     
