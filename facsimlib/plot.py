@@ -639,6 +639,15 @@ def plot_up_down_hires_zscore_random(network_src_list, trial=500):
 
 def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
+    # - 데코레이션:
+    # - marker : 원형, 투명도 alpha = 0.5
+    # - 마커 색: 생물 (파랑), 컴싸 (오렌지), 물리 (진초록?) → 이 색을 일단 정하면 전체 분야 나타내는 그림에는 통일
+    # - x-label, y-label 크기 15 정도
+    # - 그림 크기 정사각형으로 10 x 10 ?
+    # - tick label 도 13 정도
+    # - 타이틀은 없애고
+    # - 레전드로
+
     if not isinstance(network_u, Field) or not isinstance(network_v, Field):
         return None
     elif not isinstance(normalized, bool):
@@ -657,29 +666,31 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
     font = {'family': 'Helvetica Neue', 'size': 9}
 
     plt.rc('font', **font)
-    plt.figure(figsize=(7, 5), dpi=200)
+    plt.figure(figsize=(6, 6), dpi=200)
 
     if normalized:
 
         plt.xlim(0, 1)
         plt.ylim(0, 1)
 
+        # ax1.tick_params(axis='both', labelsize=16)
+        # ax2.tick_params(axis='both', labelsize=16)
+
         plt.xticks(np.arange(0, 1.1, 0.25))
         plt.yticks(np.arange(0, 1.1, 0.25))
 
-        title = "Rank Comparison"
-        x_label = f"Normalized Rank (Network: {network_u.name})"
-        y_label = f"Normalized Rank (Network: {network_v.name})"
+        x_label = "Normalized Rank (Opened)"
+        y_label = "Normalized Rank (Closed)"
 
-        plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
 
-        plt.scatter(rank_common_u, rank_common_v, s=20, marker='x', c='#4169E1')
+        plt.scatter(rank_common_u, rank_common_v, s=20, marker='o', c=network_u.color, alpha=0.5, label=network_u.name)
 
         plt.plot([0, 1], [0, 1], c='black', linewidth=0.5)
 
         plt.savefig(fig_path)
+        plt.legend()
         plt.clf()
     
     else:
@@ -690,15 +701,13 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
         plt.xticks(range(1, max_rank_u + 1, math.floor(max_rank_u / 4)))
         plt.yticks(range(1, max_rank_v + 1, math.floor(max_rank_v / 4)))
 
-        title = "Rank Comparison"
-        x_label = f"Rank (Network: {network_u.name})"
-        y_label = f"Rank (Network: {network_v.name})"
+        x_label = "Rank (Opened)"
+        y_label = "Rank (Closed)"
 
-        plt.title(title)
         plt.xlabel(x_label)
         plt.ylabel(y_label)
 
-        plt.scatter(rank_common_u, rank_common_v, s=20, marker='x', c='#4169E1')
+        plt.scatter(rank_common_u, rank_common_v, s=20, marker='o', c=network_u.color, alpha=0.5)
 
         plt.plot([1, max_rank_u], [1, max_rank_v], c='black', linewidth=0.5)
 
@@ -764,14 +773,14 @@ if (__name__ == "__main__"):
 
     network_dict = facsimlib.processing.construct_network()
 
-    selects = [NS('region', area_seoul, 'in', "Seoul"),
-               NS('region', area_capital, 'in', "Capital area"),
-               NS('region', area_others, 'in', "Others")]
-
     for net in network_dict.values():
 
-        plot_nonkr_bar_select(net, selects, normalized=True)
-        plot_nonkr_bar_select(net, selects)
+        net_closed = net.closed
+
+        net.set_ranks()
+        net_closed.set_ranks()
+
+        plot_rank_comparison(net, net_closed)
 
         
 

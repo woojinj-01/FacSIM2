@@ -68,7 +68,7 @@ class EdgeSelect:
 
 
 class Field():
-    def __init__(self, name, based_on_graph=None, nx_data=None, **attr) -> None:
+    def __init__(self, name, based_on_graph=None, nx_data=None, color=None, **attr) -> None:
         
         if (based_on_graph is not None):
             self.net = based_on_graph
@@ -77,6 +77,25 @@ class Field():
             self.net = nx.MultiDiGraph(name=name, incoming_graph_data=nx_data, **attr)
 
         self.inst_id = 1
+
+        match self.name:
+
+            case "Biology":
+                self.color = "#0584F2"
+
+            case "Computer Science":
+                self.color = "#F18904"
+
+            case "Physics":
+                self.color = "#00743F"
+
+            case _:
+
+                if color is None:
+                    self.color = "black"
+
+                else:
+                    self.color = color
 
     def __repr__(self):
 
@@ -272,7 +291,7 @@ class Field():
         for node in nodes_to_remove:
             net_filtered.remove_node(node)
 
-        return Field(f"Filtered {self.name} ({select})", net_filtered)
+        return Field(f"Filtered {self.name} ({select})", net_filtered, color=self.color)
     
     def randomize(self, times=1):
 
@@ -313,7 +332,7 @@ class Field():
             
             net_rand.add_edge(inst_u, inst_v)
 
-        return Field(f"Random {self.name}", net_rand)
+        return Field(f"Random {self.name}", net_rand, color=self.color)
     
     def export_ranks(self):
 

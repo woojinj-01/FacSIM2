@@ -152,8 +152,18 @@ def up_down_hires(network: Field, normalized: bool = False):
         total_hire = up_hire + self_hire + down_hire
 
         return (up_hire / total_hire, self_hire / total_hire, down_hire / total_hire)
+    
+
+def paired_t_test_rank(network_u: Field, network_v: Field):
+
+    ranks_dict_u = network_u.ranks(inverse=True)
+    ranks_dict_v = network_v.ranks(inverse=True)
+    
+    ranks_u = [ranks_dict_u[key] for key in sorted(ranks_dict_u.keys())]
+    ranks_v = [ranks_dict_v[key] for key in sorted(ranks_dict_v.keys())]
+
+    return scipy.stats.ttest_rel(ranks_u, ranks_v)
 
 
 if (__name__ == "__main__"):
-
     pass
