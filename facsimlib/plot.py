@@ -7,6 +7,13 @@ import facsimlib.math
 from facsimlib.academia import Field, NodeSelect as NS
 from facsimlib.text import get_country_code, normalize_inst_name, area_seoul, area_capital, area_others
 
+param_fig_xsize = 10
+param_fig_ysize = 10
+param_alpha = 0.5
+param_xlabel_size = 15
+param_ylabel_size = 15
+param_tick_size = 13
+
 
 def plot_lorentz_curve_out_degree_integrated(network_list):
     
@@ -654,9 +661,9 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
         return None
 
     if normalized:
-        fig_path = f"./fig/rank_comparison_normalized_{network_u.name}_{network_v.name}.png"
+        fig_path = f"./fig/rank_comparison_normalized_{network_u.name}_{network_v.name}.pdf"
     else:
-        fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.png"
+        fig_path = f"./fig/rank_comparison_{network_u.name}_{network_v.name}.pdf"
     
     (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network_u, network_v, normalized)
 
@@ -676,21 +683,22 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
         # ax1.tick_params(axis='both', labelsize=16)
         # ax2.tick_params(axis='both', labelsize=16)
 
-        plt.xticks(np.arange(0, 1.1, 0.25))
-        plt.yticks(np.arange(0, 1.1, 0.25))
+        plt.xticks(np.arange(0, 1.1, 0.25), fontsize=param_tick_size)
+        plt.yticks(np.arange(0, 1.1, 0.25), fontsize=param_tick_size)
 
         x_label = "Normalized Rank (Opened)"
         y_label = "Normalized Rank (Closed)"
 
-        plt.xlabel(x_label)
-        plt.ylabel(y_label)
+        plt.xlabel(x_label, fontsize=param_xlabel_size)
+        plt.ylabel(y_label, fontsize=param_ylabel_size)
 
-        plt.scatter(rank_common_u, rank_common_v, s=20, marker='o', c=network_u.color, alpha=0.5, label=network_u.name)
+        plt.scatter(rank_common_u, rank_common_v, s=20, marker='o', c=network_u.color, alpha=param_alpha, label=network_u.name)
 
         plt.plot([0, 1], [0, 1], c='black', linewidth=0.5)
 
         plt.savefig(fig_path)
         plt.legend()
+
         plt.clf()
     
     else:
@@ -711,7 +719,7 @@ def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
         plt.plot([1, max_rank_u], [1, max_rank_v], c='black', linewidth=0.5)
 
-        plt.savefig(fig_path)
+        plt.savefig(fig_path, bbox_inches='tight')
         plt.clf()
 
 
