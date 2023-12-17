@@ -526,8 +526,8 @@ def plot_up_down_hires(network_list, normalized: bool = False):
 
     network_names = [net.name for net in network_list]
 
-    fig_path = f"./fig/hires_updown_{'_'.join(network_names)}.png" if normalized is False \
-        else f"./fig/hires_updown_{'_'.join(network_names)}_Norm.png"
+    fig_path = f"./fig/hires_updown_{'_'.join(network_names)}.pdf" if normalized is False \
+        else f"./fig/hires_updown_{'_'.join(network_names)}_Norm.pdf"
 
     up_hires = []
     self_hires = []
@@ -546,19 +546,20 @@ def plot_up_down_hires(network_list, normalized: bool = False):
     font = {'family': 'Helvetica Neue', 'size': 9}
 
     plt.rc('font', **font)
-    plt.figure(figsize=(7, 5), dpi=200)
+    plt.figure(figsize=(param_fig_xsize, param_fig_ysize), dpi=200)
 
-    title = "Distribution of Hires"
-    x_label = "Network"
+    # x_label = "Network"
     y_label = "Hires" if normalized is False else "Hires (Normalized)"
 
-    plt.title(title)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    # plt.xlabel(x_label, fontsize=param_xlabel_size)
+    plt.ylabel(y_label, fontsize=param_tick_size)
 
     if normalized:
         plt.ylim(0, 1)
-        plt.yticks(np.arange(0, 1.1, 0.25))
+        plt.yticks(np.arange(0, 1.1, 0.25), fontsize=param_tick_size)
+
+    plt.xticks(fontsize=param_tick_size)
+    plt.yticks(fontsize=param_tick_size)
 
     plt.bar(network_names, down_hires, color='blue', label='Down hires', alpha=0.7, edgecolor='black')
     plt.bar(network_names, self_hires, color='red', bottom=down_hires, label='Self hires', alpha=0.7, edgecolor='black')
@@ -566,8 +567,9 @@ def plot_up_down_hires(network_list, normalized: bool = False):
             label='Up hires', alpha=0.7, edgecolor='black')
 
     plt.legend()
+    # plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), mode="expand", ncol=3, labelspacing=10)
 
-    plt.savefig(fig_path)
+    plt.savefig(fig_path, bbox_inches='tight')
     
     plt.clf()
 
@@ -782,13 +784,9 @@ if (__name__ == "__main__"):
     network_dict = facsimlib.processing.construct_network()
 
     for net in network_dict.values():
-
-        net_closed = net.closed
-
         net.set_ranks()
-        net_closed.set_ranks()
 
-        plot_rank_comparison(net, net_closed)
+    plot_up_down_hires(network_dict.values(), normalized=True)
 
         
 
