@@ -23,9 +23,12 @@ if (__name__ == "__main__"):
 
     networks = construct_network()
 
-    net_phy_closed = networks["Physics"].closed
-    net_phy_closed.set_ranks()
-    net_phy_closed.export_ranks()
+    for net in networks.values():
+
+        net_closed = net.closed
+
+        net_closed.set_ranks()
+        net_closed.export_ranks()
 
     # print(net_bio)
     

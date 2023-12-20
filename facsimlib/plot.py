@@ -5,7 +5,7 @@ import math
 import facsimlib.processing
 import facsimlib.math
 from facsimlib.academia import Field, NodeSelect as NS
-from facsimlib.text import get_country_code, normalize_inst_name, area_seoul, area_capital, area_others
+from facsimlib.text import get_country_code, normalize_inst_name
 
 param_fig_xsize = 10
 param_fig_ysize = 10
@@ -402,19 +402,20 @@ def plot_nonkr_bar_select(network: Field, selects: list, normalized: bool = Fals
     font = {'family': 'Helvetica Neue', 'size': 9}
 
     plt.rc('font', **font)
-    plt.figure(figsize=(7, 5), dpi=200)
+    plt.figure(figsize=(param_fig_xsize, param_fig_ysize), dpi=200)
 
     title = f"Doctorate Country for Assistant Professors (Network: {network.name})"
     x_label = "Number of Assistant Professors" if normalized is False else "Number of Assistant Professors (Normalized)"
     y_label = "Category"
 
     plt.title(title)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+    plt.xlabel(x_label, fontsize=param_xlabel_size)
+    plt.ylabel(y_label, fontsize=param_ylabel_size)
 
     if normalized:
         plt.xlim(0, 1)
-        plt.xticks(np.arange(0, 1.1, 0.25))
+        plt.xticks(np.arange(0, 1.1, 0.25), fontsize=param_tick_size)
+        plt.yticks(fontsize=param_tick_size)
 
     edge_width = 1 if 15 / len(x_co) > 1 else 15 / len(x_co)
 
@@ -426,7 +427,8 @@ def plot_nonkr_bar_select(network: Field, selects: list, normalized: bool = Fals
 
     plt.gca().invert_yaxis()
 
-    plt.savefig(fig_path)
+    # plt.savefig(fig_path)
+    plt.show()
 
     plt.clf()
 
@@ -648,15 +650,6 @@ def plot_up_down_hires_zscore_random(network_src_list, trial=500):
 
 def plot_rank_comparison(network_u: Field, network_v: Field, normalized=True):
 
-    # - 데코레이션:
-    # - marker : 원형, 투명도 alpha = 0.5
-    # - 마커 색: 생물 (파랑), 컴싸 (오렌지), 물리 (진초록?) → 이 색을 일단 정하면 전체 분야 나타내는 그림에는 통일
-    # - x-label, y-label 크기 15 정도
-    # - 그림 크기 정사각형으로 10 x 10 ?
-    # - tick label 도 13 정도
-    # - 타이틀은 없애고
-    # - 레전드로
-
     if not isinstance(network_u, Field) or not isinstance(network_v, Field):
         return None
     elif not isinstance(normalized, bool):
@@ -781,12 +774,20 @@ def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
 
 if (__name__ == "__main__"):
 
+    from facsimlib.text import area_seoul, area_capital, area_metro, area_others
+
     network_dict = facsimlib.processing.construct_network()
 
-    for net in network_dict.values():
-        net.set_ranks()
+    seoul = NS('region', area_seoul, 'in', 'Seoul')
+    cap = NS('region', area_capital, 'in', 'Capital')
+    metro = NS('region', area_metro, 'in', 'Metro')
+    others = NS('region', area_others, 'in', 'Others')
 
-    plot_up_down_hires(network_dict.values(), normalized=True)
+    for net in network_dict.values():
+
+        net.copy_ranks_from(net.closed.set_ranks())
+
+        plot_nonkr_bar_select(net, [seoul, cap, metro, others], normalized=True)
 
         
 

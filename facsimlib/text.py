@@ -11,21 +11,29 @@ hamming_dist_threshold = 0.25
 area_seoul = ['seoul']
 
 area_capital = ['hwaseong', 'bucheon', 'suwon', 'ansan',
-                'songdo', 'anseong', 'osan', 'yongin',
-                'goyang', 'anyang', 'incheon', 'gyeonggi-do',
+                'anseong', 'osan', 'yongin',
+                'goyang', 'anyang', 'gyeonggi-do',
                 'seongnam', '_x0008_suwon']
 
-area_others = ['miryang', 'pohang', 'daegu', 'jeonju',
+area_metro = ['songdo', 'incheon', 'daegu', 'gwangju', 'daejeon', 'ulsan', 'busan', 'pusan']
+
+area_others = ['miryang', 'pohang', 'jeonju',
                'changwon', 'asan', 'gunsan', 'yeongju',
-               'jeju', 'gongju', 'gwangju', 'goesan',
-               'jecheon', 'chuncheon', 'daejeon', 'kyungsan',
-               'gumi', 'ulsan', 'masan', 'muan',
-               'cheongju', 'yeosu', 'busan', 'wonju',
+               'jeju', 'gongju', 'goesan',
+               'jecheon', 'chuncheon', 'kyungsan',
+               'gumi', 'masan', 'muan',
+               'cheongju', 'yeosu', 'wonju',
                'cheonan', 'chuncheon-si', 'kunsan', 'sejong',
                'gyeongsan', 'jinju', 'suncheon', 'gangneung',
                'mokpo', 'cheonanl', 'sunchon', 'chungju',
-               'gyeongju', 'kongju', 'andong', 'pusan',
+               'gyeongju', 'kongju', 'andong',
                'gimhae', 'iksan', 'namwon']
+
+ists = ['korea advanced institute of science and technology,daejeon,KR',
+        'gwangju institute of science and technology,gwangju,KR',
+        'daegu gyeongbuk institute of science and technology,daegu,KR',
+        'korea advanced institute of science and technology munji camus,daejeon,KR',
+        'ulsan national institute of science and technology,ulsan,KR']
 
 
 def are_similar_texts(str_1, str_2):    # str_2 is reference (more reliable)

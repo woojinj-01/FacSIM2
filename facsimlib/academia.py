@@ -158,7 +158,7 @@ class Field():
             inst = self.inst(name)
 
             if inst:
-                if (inst['rank']):
+                if (inst['rank'] and inst['rank_norm']):
                     length += 1
 
         return length
@@ -171,22 +171,18 @@ class Field():
 
             inst = self.inst(name)
 
+            rank = inst['rank_norm'] if normalized else inst['rank']
+
             if (inst is None):
                 continue
                 
             if (inverse is True):
-                ranks[name] = inst['rank']
+                ranks[name] = rank
 
             else:
-                ranks[inst['rank']] = name
+                ranks[rank] = name
 
-        if normalized is True:
-            if inverse is True:
-                return {key: value / len(ranks) for key, value in ranks.items()}
-            else:
-                return {key / len(ranks): value for key, value in ranks.items()}
-        else:
-            return ranks    
+        return ranks    
         
     def inst(self, name):
 
@@ -250,6 +246,7 @@ class Field():
         for node in self.net.nodes():
 
             self.net.nodes[node]['rank'] = integers_based_on_rank.pop()
+            self.net.nodes[node]['rank_norm'] = self.net.nodes[node]['rank'] / len(self.net.nodes())
 
         return self
 
@@ -258,22 +255,26 @@ class Field():
         for node in self.net.nodes():
 
             self.net.nodes[node]['rank'] = None
+            self.net.nodes[node]['rank_norm'] = None
 
         return self
 
     def copy_ranks_from(self, another_field):
 
         ranks_to_copy = {}
+        ranks_norm_to_copy = {}
 
         for node in another_field.net.nodes():
 
-            if (another_field.net.nodes[node]['rank'] is not None):
+            if (another_field.net.nodes[node]['rank'] is not None and another_field.net.nodes[node]['rank_norm'] is not None):
 
                 ranks_to_copy[node] = another_field.net.nodes[node]['rank']
+                ranks_norm_to_copy[node] = another_field.net.nodes[node]['rank_norm']
 
         for node in list(ranks_to_copy.keys()):
 
             self.net.nodes[node]['rank'] = ranks_to_copy[node]
+            self.net.nodes[node]['rank_norm'] = ranks_norm_to_copy[node]
 
         return self
 
