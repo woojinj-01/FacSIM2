@@ -37,6 +37,7 @@ inst_ists = ['korea advanced institute of science and technology,daejeon,KR',
 
 con_america = ["US", "CA"]
 con_asia = ["KR", "JP", "IN", "INDIA", "KOREA", "UZ", "IL", "PK", "SINGAPORE", "MONGOLIA", "CN", "SG"]
+con_asia_without_kr = ["JP", "IN", "INDIA", "UZ", "IL", "PK", "SINGAPORE", "MONGOLIA", "CN", "SG"]
 con_europe = ["SE", "HU", "UK", "ES", "FR", "IT", "DE", "SZ", "AT", "NL", "RU", "DK", "PL", "WE"]
 con_ocenaia = ["NZ", "AU"]
 
