@@ -29,11 +29,16 @@ area_others = ['miryang', 'pohang', 'jeonju',
                'gyeongju', 'kongju', 'andong',
                'gimhae', 'iksan', 'namwon']
 
-ists = ['korea advanced institute of science and technology,daejeon,KR',
-        'gwangju institute of science and technology,gwangju,KR',
-        'daegu gyeongbuk institute of science and technology,daegu,KR',
-        'korea advanced institute of science and technology munji camus,daejeon,KR',
-        'ulsan national institute of science and technology,ulsan,KR']
+inst_ists = ['korea advanced institute of science and technology,daejeon,KR',
+             'gwangju institute of science and technology,gwangju,KR',
+             'daegu gyeongbuk institute of science and technology,daegu,KR',
+             'korea advanced institute of science and technology munji camus,daejeon,KR',
+             'ulsan national institute of science and technology,ulsan,KR']
+
+con_america = ["US", "CA"]
+con_asia = ["KR", "JP", "IN", "INDIA", "KOREA", "UZ", "IL", "PK", "SINGAPORE", "MONGOLIA", "CN", "SG"]
+con_europe = ["SE", "HU", "UK", "ES", "FR", "IT", "DE", "SZ", "AT", "NL", "RU", "DK", "PL", "WE"]
+con_ocenaia = ["NZ", "AU"]
 
 
 def are_similar_texts(str_1, str_2):    # str_2 is reference (more reliable)

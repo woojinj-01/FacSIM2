@@ -79,6 +79,9 @@ class Field():
 
         self.inst_id = 1
 
+        self.stats = {"region": set(),
+                      "country": set()}
+
         match self.name:
 
             case "Biology":
@@ -216,6 +219,9 @@ class Field():
 
         self.net.add_node(inst.name, id=self.inst_id, rank=None, **inst.to_dict())
 
+        self.stats["region"].add(get_region(inst.name))
+        self.stats["country"].add(get_country_code(inst.name))
+
         self.inst_id += 1
 
         return self.net.nodes[inst.name]
@@ -351,6 +357,19 @@ class Field():
         
         return df.to_csv(path, sep='\t', index=False)
     
+    def export_stats(self, key):
+
+        if key not in self.stats.keys():
+            return
+
+        data = self.stats[key]
+        
+        path = f"stats_{key}_{self.name}.csv"
+
+        df = pd.DataFrame(data)
+        
+        return df.to_csv(path, sep='\t', index=False)
+    
 
 class Institution:
     def __init__(self, inst_name: str) -> None:
@@ -435,6 +454,4 @@ if __name__ == "__main__":
 
     for net in network_dict.values():
 
-        net_c = net.closed.set_ranks()
-
-        net_c.export_ranks()
+        net.export_stats("country")
