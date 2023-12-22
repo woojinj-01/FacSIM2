@@ -1,6 +1,7 @@
 import networkx as nx
 import facsimlib.SpringRank as sp
 from facsimlib.text import get_country_code, get_region, normalize_inst_name
+import facsimlib.processing
 
 from copy import deepcopy
 from random import shuffle
@@ -426,3 +427,14 @@ class Move:
             result[name] = value
 
         return result
+    
+
+if __name__ == "__main__":
+
+    network_dict = facsimlib.processing.construct_network()
+
+    for net in network_dict.values():
+
+        net_c = net.closed.set_ranks()
+
+        net_c.export_ranks()
