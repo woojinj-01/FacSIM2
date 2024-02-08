@@ -3,7 +3,7 @@ fig/*
 data/*
 !data/.gitkeep
 facsimlib/__pycache__
-test/__pycache__
+script/__pycache__
 results.txt
 sandbox.py
 setup.cfg
