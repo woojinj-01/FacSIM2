@@ -219,15 +219,25 @@ def process_row(iterator, row, network):
         network.add_move(edge)
 
 
-def construct_network():
+def construct_network(net_type='global'):
+
+    if net_type not in ['global', 'domestic']:
+        return None
 
     prep_list = preprocess("data")
     network_dict = {}
 
     for field, df_list in prep_list:
-
+        
         network_dict[field] = Field(name=field)
+
         process_file(df_list, network_dict[field])
+
+    if net_type == 'global':
+        return network_dict
+    
+    for field, net in network_dict.items():
+        network_dict[field] = net.closed
 
     return network_dict
 

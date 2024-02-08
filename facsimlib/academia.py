@@ -137,7 +137,7 @@ class Field():
         select = NodeSelect("country_code", "KR", "=")
 
         self_closed = self.filter(select)
-        self_closed.name = f"Closed {self.name}"
+        self_closed.name = f"Domestic {self.name}"
 
         return self_closed
     

@@ -772,22 +772,75 @@ def plot_rank_comparison_multiple(network_u: Field, network_v_list: list):
     plt.clf()
 
 
-if (__name__ == "__main__"):
+def plot_doctorate_rank_drop(network):
 
-    from facsimlib.text import area_seoul, area_capital, area_metro, area_others
+    fig_path = f"./fig/doctorate_rank_drop_{network.name}.png"
+
+    network_c = network.closed
+
+    network.set_ranks()
+    network_c.set_ranks()
+    
+    font = {'family': 'Helvetica Neue', 'size': 9}
+
+    plt.rc('font', **font)
+    plt.figure(figsize=(7, 5), dpi=200)
+
+    plt.xlabel("Rank Variation")
+    plt.ylabel("Ratio of S.Korea Doctorates")
+
+    plt.xlim(-1, 1)
+    plt.xticks(np.arange(-1, 1.1, 0.25))
+
+    (rank_common_u, rank_common_v) = facsimlib.math._extract_common_ranks(network, network_c, normalized=True)
+
+    rank_variation = {rank_common_v[i]: rank_common_v[i] - rank_common_u[i] for i in range(len(rank_common_u))}
+
+    ranks = network_c.ranks(normalized=True, inverse=True)
+
+    x_co = []
+    y_co = []
+
+    for node in network_c.net.nodes:
+
+        edges_in = network.net.in_edges(node, data=True)
+
+        rank = ranks[node]
+        rank_drop = rank_variation[rank]
+
+        if (rank is None):
+            continue
+
+        total_count = len(edges_in)
+        kr_count = 0
+
+        for _, _, data in edges_in:
+
+            if (get_country_code(data['u_name']) == 'KR'):
+                kr_count += 1
+            elif (get_country_code(data['u_name']) == 'KOREA'):
+                kr_count += 1
+
+        if total_count != 0:
+
+            ratio = kr_count / total_count
+
+            x_co.append(rank_drop)
+            y_co.append(ratio)
+
+    plt.scatter(x_co, y_co, s=20, marker='o', c=network.color, alpha=param_alpha)
+
+    plt.savefig(fig_path)
+    plt.clf()
+
+
+if (__name__ == "__main__"):
 
     network_dict = facsimlib.processing.construct_network()
 
-    seoul = NS('region', area_seoul, 'in', 'Seoul')
-    cap = NS('region', area_capital, 'in', 'Capital')
-    metro = NS('region', area_metro, 'in', 'Metro')
-    others = NS('region', area_others, 'in', 'Others')
-
     for net in network_dict.values():
 
-        net.copy_ranks_from(net.closed.set_ranks())
-
-        plot_nonkr_bar_select(net, [seoul, cap, metro, others], normalized=True)
+        plot_doctorate_rank_drop(net)
 
         
 
