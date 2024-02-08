@@ -454,4 +454,8 @@ if __name__ == "__main__":
 
     for net in network_dict.values():
 
-        net.export_stats("country")
+        net_c = net.closed.set_ranks()
+        net.set_ranks()
+
+        net.export_ranks()
+        net_c.export_ranks()

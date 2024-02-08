@@ -1,5 +1,6 @@
 import scipy.stats
 import math
+import numpy as np
 
 from facsimlib.academia import Field
 from facsimlib.text import normalize_inst_name
@@ -152,7 +153,51 @@ def up_down_hires(network: Field, normalized: bool = False):
         total_hire = up_hire + self_hire + down_hire
 
         return (up_hire / total_hire, self_hire / total_hire, down_hire / total_hire)
+
+
+def up_down_hires_adv(network: Field, normalized: bool = False):
+
+    def get_group_number(rank, rank_len, group_len):
+
+        group_size = math.floor(rank_len / group_len)
+
+        group_num = math.ceil(rank / group_size)
+
+        if group_num > group_len:
+            return group_len
+        else:
+            return group_num
+
+    if (not isinstance(network, Field)):
+        return None
+
+    rank_len = network.rank_length
+    group_len = 10
+
+    ranks = network.ranks(inverse=True)
+    hire_matrix = np.zeros((group_len, group_len))
+    np.set_printoptions(linewidth=np.inf)
     
+    for move in list(network.net.edges):
+
+        r_move = rank_move(move[0], move[1], network)
+
+        if (r_move is None):
+            continue
+
+        src_group = get_group_number(ranks[move[0]], rank_len, group_len)
+        dst_group = get_group_number(ranks[move[1]], rank_len, group_len)
+
+        hire_matrix[src_group - 1][dst_group - 1] += 1
+
+    if normalized is False:
+        return hire_matrix
+    
+    else:
+        total_hire = np.sum(hire_matrix)
+        
+        return hire_matrix / total_hire
+
 
 def paired_t_test_rank(network_u: Field, network_v: Field):
 
@@ -166,4 +211,10 @@ def paired_t_test_rank(network_u: Field, network_v: Field):
 
 
 if (__name__ == "__main__"):
-    pass
+    
+    network_dict = construct_network()
+
+    for net in network_dict.values():
+
+        print(net.name)
+        print(up_down_hires_adv(net))
