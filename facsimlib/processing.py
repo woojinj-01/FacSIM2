@@ -237,7 +237,7 @@ def construct_network(net_type='global'):
         return network_dict
     
     for field, net in network_dict.items():
-        network_dict[field] = net.closed
+        network_dict[field] = net.domestic
 
     return network_dict
 

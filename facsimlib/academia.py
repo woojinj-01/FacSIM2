@@ -69,7 +69,7 @@ class EdgeSelect:
 
 
 class Field():
-    def __init__(self, name, based_on_graph=None, nx_data=None, color=None, **attr) -> None:
+    def __init__(self, name, based_on_graph=None, nx_data=None, color=None, net_type='global', **attr) -> None:
         
         if (based_on_graph is not None):
             self.net = based_on_graph
@@ -81,6 +81,15 @@ class Field():
 
         self.stats = {"region": set(),
                       "country": set()}
+        
+        if net_type == 'global':
+            self.type = 'global'
+        
+        elif net_type == 'domestic':
+            self.type = 'domestic'
+
+        else:
+            return None
 
         match self.name:
 
@@ -132,14 +141,15 @@ class Field():
         self.net.name = name
 
     @property
-    def closed(self):
+    def domestic(self):
 
         select = NodeSelect("country_code", "KR", "=")
 
-        self_closed = self.filter(select)
-        self_closed.name = f"Domestic {self.name}"
+        self_domestic = self.filter(select)
+        self_domestic.name = f"Domestic {self.name}"
+        self_domestic.net_type = 'domestic'
 
-        return self_closed
+        return self_domestic
     
     @property
     def random(self):
@@ -454,7 +464,7 @@ if __name__ == "__main__":
 
     for net in network_dict.values():
 
-        net_c = net.closed.set_ranks()
+        net_c = net.domestic.set_ranks()
         net.set_ranks()
 
         net.export_ranks()
