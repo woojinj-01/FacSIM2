@@ -118,15 +118,15 @@ class Field():
 
         str_list.append(f"Institutions: {len(list(self.net.nodes))}\n")
         
-        for inst_name in list(self.net.nodes):
-            str_list.append(inst_name)
+        # for inst_name in list(self.net.nodes):
+        #     str_list.append(inst_name)
 
         str_list.append("\n")
 
         str_list.append(f"Moves: {len(list(self.net.edges))}\n")
         
-        for move in list(self.net.edges):
-            str_list.append(f"{move[0]} -> {move[1]}")
+        # for move in list(self.net.edges):
+        #     str_list.append(f"{move[0]} -> {move[1]}")
 
         str_list.append("\n")
 
