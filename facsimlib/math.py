@@ -1,6 +1,7 @@
 import scipy.stats
 import math
 import numpy as np
+import networkx as nx
 
 from facsimlib.academia import Field
 from facsimlib.text import normalize_inst_name
@@ -208,6 +209,19 @@ def paired_t_test_rank(network_u: Field, network_v: Field):
     ranks_v = [ranks_dict_v[key] for key in sorted(ranks_dict_v.keys())]
 
     return scipy.stats.ttest_rel(ranks_u, ranks_v)
+
+
+def calc_sparsity(network: Field):
+
+    adj_mat = nx.to_numpy_array(network.net)
+
+    print(adj_mat)
+
+    num_zeros = np.count_nonzero(adj_mat == 0)
+
+    total_elem = adj_mat.size
+
+    return num_zeros / total_elem
 
 
 if (__name__ == "__main__"):

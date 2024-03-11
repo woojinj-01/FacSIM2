@@ -380,6 +380,27 @@ class Field():
         
         return df.to_csv(path, sep='\t', index=False)
     
+    def export_node_list(self):
+
+        path = f"stats_node_{self.name}.csv"
+        
+        nodes = list(self.net.nodes())
+
+        df = pd.DataFrame(nodes)
+
+        return df.to_csv(path, sep='\t', index=False)
+
+    def export_edge_list(self):
+
+        path = f"stats_edge_{self.name}.csv"
+        
+        edges = list(self.net.edges())
+
+        df = pd.DataFrame(edges)
+
+        return df.to_csv(path, sep='\t', index=False)
+
+    
 
 class Institution:
     def __init__(self, inst_name: str) -> None:

@@ -1,5 +1,4 @@
-fig/*
-!fig/.gitkeep
+./results
 data/*
 !data/.gitkeep
 facsimlib/__pycache__

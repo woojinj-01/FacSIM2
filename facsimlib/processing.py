@@ -5,6 +5,7 @@ import pandas as pd
 from facsimlib.text import are_similar_texts, normalize_inst_name
 from facsimlib.academia import Institution as Inst
 from facsimlib.academia import Move, Field
+from facsimlib.math import calc_sparsity
 
 cache_file_pattern = re.compile(r'^~\$')
 masked_file_pattern = re.compile(r'^X_')
@@ -146,11 +147,21 @@ def preprocess(target_dir):
 
 def process_file(iterator_and_df_list, network):
 
+    total_samples = 0
+    effective_samples = 0
+
     for iterator, df in iterator_and_df_list:
 
         for _, row in df.iterrows():
 
-            process_row(iterator, row, network)
+            effective = process_row(iterator, row, network)
+
+            if effective:
+                effective_samples += 1
+
+            total_samples += 1
+
+    return (total_samples, effective_samples)
 
 
 def process_row(iterator, row, network):
@@ -209,14 +220,24 @@ def process_row(iterator, row, network):
     dst = find_dst()
     edge = find_edge(src, dst)
 
+    all_set = True
+
     if (src is not None and src.valid()):
         network.add_inst(src)
+    else:
+        all_set = False
     
     if (dst is not None and dst.valid()):
         network.add_inst(dst)
+    else:
+        all_set = False
 
     if (edge is not None and edge.valid()):
         network.add_move(edge)
+    else:
+        all_set = False
+
+    return all_set
 
 
 def construct_network(net_type='global'):
@@ -231,7 +252,17 @@ def construct_network(net_type='global'):
         
         network_dict[field] = Field(name=field)
 
-        process_file(df_list, network_dict[field])
+        print(f"=== Field: {field} ===")
+
+        total, effective = process_file(df_list, network_dict[field])
+
+        print(f"Total samples: {total}")
+        print(f"Effective samples: {effective}")
+
+        print(f"Sparsity: {calc_sparsity(network_dict[field])}")
+        print(f"Domestic sparsity: {calc_sparsity(network_dict[field].domestic)}")
+
+        print("\n")
 
     if net_type == 'global':
         return network_dict
