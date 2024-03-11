@@ -354,7 +354,7 @@ class Field():
     
     def export_ranks(self):
 
-        path = f"ranks_{self.name}.csv"
+        path = f"./results/ranks_{self.name}.csv"
 
         data = {"Rank": [], "Inst": []}
 
@@ -374,7 +374,7 @@ class Field():
 
         data = self.stats[key]
         
-        path = f"stats_{key}_{self.name}.csv"
+        path = f"./results/stats_{key}_{self.name}.csv"
 
         df = pd.DataFrame(data)
         
@@ -382,7 +382,7 @@ class Field():
     
     def export_node_list(self):
 
-        path = f"stats_node_{self.name}.csv"
+        path = f"./results/node_{self.name}.csv"
         
         nodes = list(self.net.nodes())
 
@@ -392,7 +392,7 @@ class Field():
 
     def export_edge_list(self):
 
-        path = f"stats_edge_{self.name}.csv"
+        path = f"./results/edge_{self.name}.csv"
         
         edges = list(self.net.edges())
 
@@ -401,7 +401,6 @@ class Field():
         return df.to_csv(path, sep='\t', index=False)
 
     
-
 class Institution:
     def __init__(self, inst_name: str) -> None:
 

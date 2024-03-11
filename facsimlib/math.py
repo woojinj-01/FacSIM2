@@ -147,7 +147,6 @@ def up_down_hires(network: Field, normalized: bool = False):
             pass
 
     if normalized is False:
-
         return (up_hire, self_hire, down_hire)
     
     else:
@@ -214,8 +213,6 @@ def paired_t_test_rank(network_u: Field, network_v: Field):
 def calc_sparsity(network: Field):
 
     adj_mat = nx.to_numpy_array(network.net)
-
-    print(adj_mat)
 
     num_zeros = np.count_nonzero(adj_mat == 0)
 

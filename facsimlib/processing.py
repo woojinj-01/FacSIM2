@@ -222,20 +222,20 @@ def process_row(iterator, row, network):
 
     all_set = True
 
-    if (src is not None and src.valid()):
-        network.add_inst(src)
-    else:
+    if (src is None or not src.valid()):
         all_set = False
     
-    if (dst is not None and dst.valid()):
-        network.add_inst(dst)
-    else:
+    if (dst is None or not dst.valid()):
         all_set = False
 
-    if (edge is not None and edge.valid()):
-        network.add_move(edge)
-    else:
+    if (edge is None or not edge.valid()):
         all_set = False
+
+    if all_set:
+
+        network.add_inst(src)
+        network.add_inst(dst)
+        network.add_move(edge)
 
     return all_set
 
