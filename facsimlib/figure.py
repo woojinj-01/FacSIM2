@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 import matplotlib.ticker as ticker
+import matplotlib as mpl
 import numpy as np
 import math
 from pdf2image import convert_from_path
@@ -1243,6 +1244,59 @@ def figure_rank_variation_random_zscore_vs_ratio():
     plt.clf()
 
 
+def figure_rank_variation_random_zscore_mag_vs_ratio():
+
+    fig_path = "./fig/rank_variation_random_zscore_mag_vs_ratio.pdf"
+
+    cmap = 'jet_r'
+
+    network_dict = facsimlib.processing.construct_network()
+
+    for net in network_dict.values():
+        net.set_ranks()
+
+    plt.rc('font', **param_font)
+
+    fig, ax = plt.subplots(1, 3, sharey='all', figsize=(3 * param_fig_xsize, param_fig_ysize), dpi=200)
+
+    zscores = []
+
+    variations = _figure_rank_variation(network_dict["Biology"], None)
+    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Biology"], ax[0], cmap, to_compare=variations, marker='o')
+
+    variations = _figure_rank_variation(network_dict["Computer Science"], None)
+    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Computer Science"], ax[1], cmap, to_compare=variations, marker='o')
+
+    variations = _figure_rank_variation(network_dict["Physics"], None)
+    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Physics"], ax[2], cmap, to_compare=variations, marker='o')
+
+    x_label = "Ratio of Foreign Doctorates"
+    y_label = "Number of Foreign Doctorates"
+
+    fig.supxlabel(x_label, fontsize=param_xlabel_size)
+    fig.supylabel(y_label, fontsize=param_ylabel_size)
+
+    vmax = max(zscores)
+    vmin = min(zscores)
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+
+    colormapping = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+
+    cbar = fig.colorbar(colormapping, ax=plt.gca())
+
+    cbar.set_label("Z-score", fontsize=param_ylabel_size * 0.7)
+
+    for axi in ax.flatten():
+
+        axi.set_xlim(0, 1)
+        axi.set_xticks(np.arange(0, 1.1, 0.25))
+        axi.tick_params(axis='both', which='both', labelsize=param_tick_size)
+        
+    plt.tight_layout(pad=1)
+    plt.savefig(fig_path, bbox_inches='tight')
+    plt.clf()
+
+
 def _figure_rank_variation(network, ax, marker='o'):
 
     if ax is None:
@@ -1551,6 +1605,109 @@ def _figure_rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_co
     # x_co_sorted, stds_sorted = zip(*sorted_data)
 
     # ax.plot(x_co_sorted, stds_sorted, marker='s', c='red', linestyle='--', alpha=param_alpha)
+
+
+def _figure_rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker='x', to_compare=None):
+
+    trial = 500
+    domestic_ranks = network.domestic.set_ranks().ranks(normalized=True)
+
+    ns_korea = NS('country_code', ["KR", "KOREA"], 'in', label="Korea")
+
+    def _get_rank_variation(network):
+
+        network_c = network.domestic
+
+        network.set_ranks()
+        network_c.set_ranks()
+
+        return facsimlib.math._extract_common_ranks(network, network_c, normalized=True), network_c.ranks(normalized=True)
+    
+    def _get_num_and_ratio_foreign_doc(rank):
+
+        inst_name = domestic_ranks[rank]
+
+        kr_count = 0
+        nonkr_count = 0
+
+        edges_in = network.net.in_edges(inst_name, data=True)
+
+        for src, dst, data in edges_in:
+
+            if (ns_korea.hit(network.net.nodes[src])):
+                kr_count += 1
+
+            else:
+                nonkr_count += 1
+
+        total_count = kr_count + nonkr_count
+
+        if total_count == 0:
+            return None
+        else:
+            return (nonkr_count, nonkr_count / total_count)
+    
+    randomized = network.randomize(trial)
+
+    vari_dict = {}
+
+    for net_r in randomized:
+
+        (ranks_u, ranks_v), dom_ranks = _get_rank_variation(net_r)
+
+        for r_u, r_v in zip(ranks_u, ranks_v):
+
+            vari = r_v - r_u
+
+            if r_v not in vari_dict:
+                vari_dict[r_v] = [vari]
+            else:
+                vari_dict[r_v].append(vari)
+
+    to_delete = []
+
+    z_scores = []
+    ratio_foreign = []
+    num_foreign = []
+    
+    for key, value in vari_dict.items():
+
+        if key in to_compare:
+
+            num_n_ratio = _get_num_and_ratio_foreign_doc(key) 
+
+            if num_n_ratio is None:
+
+                to_delete.append(key)
+                continue
+
+            emp_data = to_compare[key]
+            rand_mean = sum(value) / len(value)
+            rand_std = np.std(value)
+
+            z_score = (emp_data - rand_mean) / rand_std
+
+            if z_score > 5:
+                print(f"{network.name}: {domestic_ranks[key]}")
+                
+                to_delete.append(key)
+                continue
+
+            num_foreign.append(num_n_ratio[0])
+            ratio_foreign.append(num_n_ratio[1])
+            z_scores.append(z_score)
+
+        else:
+            to_delete.append(key)
+
+    for key in to_delete:
+        del vari_dict[key]
+
+    ax.tick_params(axis='both', which='both', labelsize=param_tick_size)
+
+    ax.scatter(ratio_foreign, num_foreign, s=400, c=z_scores, marker=marker, edgecolor='black', cmap=cmap)
+
+    return z_scores
 
 
 def figure_doctorate_group():
@@ -2518,4 +2675,4 @@ def _figure_hires_z(network_dict, ax, using_hatches=True):
 
 if __name__ == '__main__':
     
-    figure_rank_variation_random_zscore_vs_ratio()
+    figure_rank_variation_random_zscore_mag_vs_ratio()
