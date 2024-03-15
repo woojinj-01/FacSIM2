@@ -1,0 +1,149 @@
+Rank	Inst	In-deg	Out-deg
+1	seoul national university,seoul,KR	6	174
+2	korea advanced institute of science and technology,daejeon,KR	7	159
+3	korea university,seoul,KR	7	47
+4	yonsei university,seoul,KR	5	33
+5	pohang university of science and technology,pohang,KR	14	34
+6	chung-ang university,seoul,KR	9	28
+7	kyungpook national university,daegu,KR	2	21
+8	inha university,incheon,KR	3	11
+9	pusan national university,busan,KR	0	8
+10	soongsil university,seoul,KR	3	9
+11	busan university,busan,KR	0	6
+12	gwangju institute of science and technology,gwangju,KR	8	11
+13	chonnam national university,gwangju,KR	3	8
+14	hongik university,seoul,KR	0	5
+15	chungbuk national university,cheongju,KR	5	9
+16	sogang university,seoul,KR	2	5
+17	hanyang university,seoul,KR	15	14
+18	sookmyung women's university,seoul,KR	0	3
+19	kyung hee university,seoul,KR	0	3
+20	ewha womans university,seoul,KR	3	4
+21	sungkyunkwan university,_x0008_suwon,KR	0	1
+22	virginia polytechnic institute and sate university,blacksburg,KR	0	1
+23	korea advanced institute of science and technology munji camus,daejeon,KR	0	1
+24	chonnam national university,yeosu,KR	0	1
+25	kangwoon university,seoul,KR	0	1
+26	kangwon national university,chuncheon,KR	1	2
+27	gwangju institute of science and techology,gwangju,KR	0	1
+28	myongji university,seoul,KR	1	1
+29	suny korea,incheon,KR	0	0
+30	kyungnam university,masan,KR	0	0
+31	konkuk university glocal campus,chungju,KR	0	0
+32	choong-ang university,seoul,KR	0	0
+33	korea military academy,seoul,KR	0	0
+34	gangneung wonju national university,gangneung,KR	0	0
+35	university of seoul,seoul,KR	0	0
+36	yongin university,yongin,KR	0	0
+37	state university of new york at stony brook at korea,songdo,KR	0	0
+38	sunghyunkwan university,seoul,KR	0	0
+39	korea university,sejong ,KR	0	0
+40	ajou university,gyeonggi-do,KR	0	0
+41	state university of new york korea,incheon,KR	0	0
+42	mokwon university,daejeon,KR	1	1
+43	sahmyook university,seoul,KR	0	0
+44	jeonbuk national university,jeonju,KR	9	6
+45	university of ulsan,ulsan,KR	1	0
+46	hanbat national university,daejeon,KR	1	0
+47	catholic university of korea,seoul,KR	1	0
+48	gachon university,seongnam,KR	1	0
+49	sun moon university,cheonan,KR	1	0
+50	jungwon university,goesan,KR	1	0
+51	kangwon national university,chuncheon-si,KR	1	0
+52	yeungnam national university,gyeongsan,KR	1	0
+53	kumoh national institute of technology,gumi,KR	1	0
+54	seowon university,cheongju,KR	1	0
+55	donga university,pusan,KR	1	0
+56	tongmyong university of information,busan,KR	1	0
+57	soonchunhyang university,asan,KR	2	1
+58	seokyeong university,seoul,KR	1	0
+59	youngsan university,pusan,KR	1	0
+60	pukyong national university,busan,KR	1	0
+61	baekseok university,cheonanl,KR	1	0
+62	kyungil university,kyungsan,KR	1	0
+63	kyungdong university,wonju,KR	1	0
+64	gyeonggi university of science and technology,suwon,KR	1	0
+65	university of suwon,suwon,KR	1	0
+66	tongmyong university,busan,KR	1	0
+67	wonju national university,gangneung,KR	1	0
+68	sungkyul university,anyang,KR	1	0
+69	tongmyung university,busan,KR	1	0
+70	pusan university of foreign language,busan,KR	1	0
+71	gyeongnam national university of science and technology,jinju,KR	1	0
+72	sangji university,seoul,KR	1	0
+73	yeungnam university,daegu,KR	1	0
+74	chongju national college of science and technology,cheongju,KR	1	0
+75	dong-a university,busan,KR	1	0
+76	seoul venture university,seoul,KR	1	0
+77	dongguk university,gyeongju,KR	1	0
+78	daewon university college,jecheon,KR	1	0
+79	youngsan university,busan,KR	1	0
+80	sungkyunkwan university,suwon,KR	12	7
+81	korea aerospace university,goyang,KR	4	2
+82	ajou university,suwon,KR	12	7
+83	korea university,sejong,KR	3	1
+84	kyungnam university,changwon,KR	2	0
+85	busan university of foreign studies,busan,KR	2	0
+86	kookmin university,seoul,KR	4	1
+87	the university of suwon,hwaseong,KR	2	0
+88	kongju national university,gongju,KR	2	0
+89	baekseok university,cheonan,KR	2	0
+90	daegu gyeongbuk institute of science and technology,daegu,KR	2	0
+91	korea nazarene university,cheonan,KR	2	0
+92	dongyang university,yeongju,KR	2	0
+93	miryang national university,miryang,KR	2	0
+94	seonam university,namwon,KR	2	0
+95	donga university,busan,KR	5	2
+96	hannam university,daejeon,KR	3	0
+97	ulsan national institute of science and technology,ulsan,KR	5	1
+98	chosun university,gwangju,KR	5	2
+99	semyung university,jecheon,KR	3	0
+100	dongguk university,seoul,KR	13	7
+101	catholic kwangdong university,gangneung,KR	3	0
+102	mokpo national maritime university,mokpo,KR	3	0
+103	inje university,gimhae,KR	4	0
+104	pai chai university,daejeon,KR	6	2
+105	jeju national university,jeju,KR	4	0
+106	kyung hee university,yongin,KR	8	2
+107	korea maritime and ocean university,busan,KR	5	0
+108	sunchon national university,sunchon,KR	5	1
+109	daejeon university,daejeon,KR	7	2
+110	keimyung university,daegu,KR	5	0
+111	hanyang university,ansan,KR	6	0
+112	yonsei university,wonju,KR	6	1
+113	dongseo university,busan,KR	7	2
+114	soonchunhang university,asan,KR	5	0
+115	hanshin university,osan,KR	5	0
+116	sunmoon university,asan,KR	6	0
+117	daegu university,daegu,KR	6	0
+118	yeungnam university,gyeongsan,KR	8	1
+119	korea national university of transportation,chungju,KR	5	0
+120	gyeongsang national university,jinju,KR	6	0
+121	sangmyung university,seoul,KR	7	0
+122	andong national university,andong,KR	6	0
+123	sangji university,wonju,KR	6	0
+124	mokpo national university,muan,KR	6	0
+125	ulsan university,ulsan,KR	9	0
+126	hankuk university of foreign studies,yongin,KR	11	1
+127	honam university,gwangju,KR	7	0
+128	changwon national university,changwon,KR	8	0
+129	pusan national university,pusan,KR	17	4
+130	kwangwoon university,seoul,KR	20	7
+131	catholic university of pusan,busan,KR	9	1
+132	chungnam national university,daejeon,KR	16	3
+133	kyonggi university,suwon,KR	13	2
+134	konkuk university,seoul,KR	12	1
+135	wonkwang university,iksan,KR	12	2
+136	seoul womens university,seoul,KR	13	2
+137	dankook university,yongin,KR	11	0
+138	hallym university,chuncheon,KR	12	0
+139	seoul national university of science and technology,seoul,KR	11	0
+140	gangneung-wonju national university,gangneung,KR	11	0
+141	hoseo university,cheonan,KR	12	1
+142	kunsan national university,kunsan,KR	12	1
+143	kumoh national institution of technology,gumi,KR	13	0
+144	dong eui university,busan,KR	16	2
+145	kongju national university,kongju,KR	14	0
+146	korea university of technology and education,cheonan,KR	19	1
+147	sejong university,seoul,KR	16	0
+148	incheon national university,incheon,KR	20	0

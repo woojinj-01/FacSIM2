@@ -1,0 +1,182 @@
+Rank	Inst	In-deg	Out-deg
+1	seoul national university,seoul,KR	30	139
+2	korea advanced institute of science and technology,daejeon,KR	30	72
+3	the university of texas at austin,austin,US	1	15
+4	purdue university,west lafayette,US	0	13
+5	university of california,berkeley,US	0	11
+6	yonsei university,seoul,KR	13	25
+7	northwestern university,evanston,US	0	11
+8	university of michigan,ann arbor,US	0	10
+9	university of pennsylvania,philadelphia,US	0	9
+10	massachusetts institute of technology,cambridge,US	0	7
+11	brown university,providence,US	0	7
+12	university of maryland,college park,US	0	7
+13	university of illinois at urbana-champaign,champaign,US	1	8
+14	california institute of technology,pasadena,US	0	6
+15	university of florida,gainesville,US	1	7
+16	iowa state university,ames,US	0	6
+17	the ohio state university,columbus,US	0	6
+18	stanford university,stanford,US	0	5
+19	korea institute of science and technology,seoul,KR	0	5
+20	the university of arizona,tucson,US	0	5
+21	north carolina state university,raleigh,US	0	5
+22	rutgers university,new brunswick,US	0	5
+23	yale university,new haven,US	0	4
+24	columbia university in the city of new york,new york,US	0	4
+25	harvard university,cambridge,US	1	5
+26	johns hopkins university,baltimore,US	0	4
+27	pennsylvania state university,university park,US	0	4
+28	university of rochester,rochester,US	0	4
+29	gwangju institute of science and technology,gwangju,KR	3	7
+30	paris-sud university,orsay,FR	0	3
+31	cornell university,ithaca,US	0	3
+32	stony brook university,stony brook,US	0	3
+33	university of cambridge,cambridge,UK	0	3
+34	indiana university bloomington,bloomington,US	0	3
+35	university of california,san diego,US	0	3
+36	university of chicago,chicago,US	0	3
+37	university of wisconsin-madison,madison,US	0	3
+38	university of washington,seattle,US	0	3
+39	washington university in st. louis,st. louis,US	0	3
+40	pohang university of science and technology,pohang,KR	24	25
+41	princeton university,princeton,US	0	2
+42	university of minnesota-twin cities,minneapolis,US	0	2
+43	brandeis university,waltham,US	0	2
+44	university of colorado boulder,boulder,US	0	2
+45	university of georgia,athens,US	0	2
+46	tohoku university,sendai,JP	0	2
+47	university of nebraska-lincoln,lincoln,US	0	2
+48	university of california,los angeles,US	0	2
+49	state university of new york,new york,US	0	2
+50	osaka university,osaka,JP	0	2
+51	syracuse university,syracuse,US	0	2
+52	michigan state university, east lansing,US	0	1
+53	sogang university,seoul,KR	6	7
+54	queens university belfast,belfast,UK	0	1
+55	hiroshima university,higashi-hiroshima,JP	0	1
+56	kyunghee university,seoul,KR	0	1
+58	university of houston,houston,US	0	1
+59	korea advanced institute of science and technology,daejeon,KR 	0	1
+60	university of cologne,cologne,DE	0	1
+61	tokyo institute of technology,tokyo,JP	0	1
+62	myongji university,seoul,KR	0	1
+63	soganguniversity,seoul,KR	0	1
+64	texas a&m university,college station,US	0	1
+65	kent state university,kent,US	0	1
+66	university of notre dame, notre dame,US	0	1
+67	university of wisconsin - madison,madison,US	0	1
+68	university of california,davis,US	0	1
+69	alabama a&m university,huntsville,US	0	1
+70	northeastern university,boston,US	0	1
+71	budapest university of technology and economics,budapest,HU	0	1
+72	university of connecticut,storrs,US	0	1
+73	paris sud university,orsay,FR	0	1
+74	temple university,philadelphia,US	0	1
+75	universite louis pasteur strasbourg,strasbourg,FR	0	1
+76	polytechnic university of milan,milan,IT	0	1
+77	university of oxford,oxford,UK	0	1
+78	university of edinburgh,edinbhurgh,UK	0	1
+79	"university of cambridge,cambridge,UK
+"	0	1
+80	university of glasgow,glasgow,UK	0	1
+81	duke university,durham,US	0	1
+82	gifu university,gifu,JP	0	1
+83	delhi university,new delhi,IN	0	1
+84	the university of tokyo,tokyo,JP	0	1
+85	university of warwick,coventry,UK	0	1
+86	university paris diderot,paris,FR	0	1
+88	university of california,oakland,US	0	1
+89	university of oregon,eugene,US	0	1
+90	university of tübingen,tübingen,DE	0	1
+91	university of tohoku,sendai,JP	0	1
+92	kentucky state university,frankfort,US	0	1
+93	university of california,irvine,US	0	1
+94	state university of new york,buffalo,US	0	1
+95	university of cincinnati,cincinnati,US	0	1
+96	royal institute of technology,stockholm,SE	0	1
+97	korea national university of education,cheongju,KR	0	1
+98	university of central florida,orlando,US	0	1
+99	university of marburg,marburg,DE	0	1
+100	university of kansas,lawrence,US	0	1
+101	university of bristol,bristol,UK	0	1
+102	technical university of berlin,berlin,DE	0	1
+103	university of tokyo,bunkyo,JP	0	1
+104	imperial college,london,UK	0	1
+105	national university of uzbekistan,tashkent,UZ	0	1
+106	university of new mexico,albuquerque,US	0	1
+107	university of toronto,toronto,CA	0	1
+108	the university of tennessee,knoxville,US	1	2
+109	kyoto university,kyoto,JP	1	1
+110	eberhard karls university of tubingen,tubingen,DE	1	1
+111	university of tokyo,tokyo,JP	1	1
+112	university of pittsburgh,pittsburgh,US	1	1
+113	california state university,northridge,US	1	0
+114	university of science and technology,daejeon,KR	1	0
+115	hampton university,hampton,US	1	0
+116	university of strathclyde,glasgow,UK	1	0
+117	florida state university,tallahassee,US	1	0
+118	sun moon university,asan,KR	1	0
+119	tohoku university,miyagi,JP	1	0
+120	university of missouri,columbia,US	1	0
+121	university of dayton,dayton,US	1	0
+123	handong global university,pohang,KR	1	0
+124	dongseo university,busan,KR	1	0
+125	halla university,wonju,KR	1	0
+126	university of tsukuba,tsukuba,JP	1	0
+127	arkansas state university,jonesboro,US	1	0
+128	university of massachusetts lowell,lowell,US	1	0
+129	cheongju university,cheongju,KR	1	0
+130	gwangju university,gwangju,KR	1	0
+131	konkuk university,chungju,KR	2	0
+132	gangneung-wonju national university,gangneung,KR	2	0
+133	sunchon national university,suncheon,KR	2	0
+134	hallym university,chuncheon,KR	2	0
+135	dankook university,yongin,KR	2	0
+136	gachon univerity,incheon,KR	2	0
+137	dongguk university,seoul,KR	4	1
+138	the catholic university of korea,bucheon,KR	3	0
+139	chosun university,gwangju,KR	3	0
+140	kongju national university,gongju,KR	4	0
+141	mokpo national university,muan,KR	4	0
+142	kumoh national institute of technology,gumi,KR	4	0
+143	yonsei university,wonju,KR	4	0
+144	changwon national university,changwon,KR	4	0
+145	hankuk university of foreign studies,seoul,KR	5	0
+146	yeungnam university,gyeongsan,KR	6	1
+147	myongji university,yongin,KR	6	0
+148	korea university,seoul,KR	27	20
+149	dankook university,cheonan,KR	7	1
+150	andong national university,andong,KR	6	0
+151	gyeongsang national university,jinju,KR	6	0
+152	dong-a university,busan,KR	6	0
+153	soonchunhyang university,asan,KR	6	0
+154	university of seoul,seoul,KR	8	1
+155	hanyang university,ansan,KR	7	0
+156	ewha womans university,seoul,KR	12	5
+157	gachon university,seongnam,KR	7	0
+158	daegu university,gyeongsan,KR	7	0
+159	kangwon national university,chuncheon,KR	7	0
+160	jeju national university,jeju,KR	7	0
+161	kunsan national university,gunsan,KR	8	0
+162	sungkyunkwan university,suwon, KR	1	0
+163	university of ulsan,ulsan,KR	10	0
+164	kwangwoon university,seoul,KR	10	0
+165	kookmin university,seoul,KR	10	0
+166	kyung hee university,seoul,KR	14	3
+167	sejong university,seoul,KR	11	0
+168	ulsan national institute of science and technology,ulsan,KR	16	3
+169	"incheon national university,_x0008_incheon,KR
+"	12	0
+170	kyungpook national university,daegu,KR	17	4
+171	soongsil university,seoul,KR	13	0
+172	chungnam national university,daejeon,KR	16	2
+173	hanyang university,seoul,KR	15	1
+174	konkuk university,seoul,KR	15	1
+175	pukyong national university,busan,KR	13	0
+176	chung-ang university,seoul,KR	14	0
+177	jeonbuk national university,jeonju,KR	16	1
+178	pusan national university,busan,KR	21	6
+179	chungbuk national university,cheongju,KR	16	0
+180	ajou university,suwon,KR	16	0
+181	inha university,incheon,KR	16	0
+182	chonnam national university,gwangju,KR	19	1
