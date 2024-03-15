@@ -33,6 +33,10 @@ param_pannel_size = param_legend_size
 
 param_font = {'family': 'Helvetica Neue', 'size': param_font_size}
 
+palette_bio = ['#0444BF', '#0584F2', '#0AAFF1', '#1D65A6', '#72A2C0']
+palette_cs = ['#C1403D', '#F46A4E', '#F4874B', '#F3B05A', '#F3D4A0']
+palette_phy = ['#107050', '#4DD8AD', '#55D9C0', '#C7F6EC', '#E7F5DE']
+
 
 def hex_to_rgb(hex_color):
 
