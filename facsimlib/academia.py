@@ -352,7 +352,14 @@ class Field():
 
         return Field(f"Random {self.name}", net_rand, color=self.color)
     
-    def export_ranks(self):
+    def export_ranks(self, advanced=False):
+
+        if not advanced:
+            self._export_ranks_normal()
+        else:
+            self._export_ranks_adv()
+    
+    def _export_ranks_normal(self):
 
         path = f"./results/ranks_{self.name}.csv"
 
@@ -362,6 +369,30 @@ class Field():
 
             data["Rank"].append(rank)
             data["Inst"].append(self.ranks()[rank])
+
+        df = pd.DataFrame(data)
+        
+        return df.to_csv(path, sep='\t', index=False)
+    
+    def _export_ranks_adv(self):
+
+        path = f"./results/ranks_adv_{self.name}.csv"
+
+        data = {"Rank": [], "Inst": [], "In-deg": [], "Out-deg": []}
+
+        ranks = self.ranks()
+
+        for rank in sorted(self.ranks().keys()):
+
+            name = ranks[rank]
+
+            in_deg = self.net.in_degree(name)
+            out_deg = self.net.out_degree(name)
+
+            data["Rank"].append(rank)
+            data["Inst"].append(name)
+            data["In-deg"].append(in_deg)
+            data["Out-deg"].append(out_deg)
 
         df = pd.DataFrame(data)
         
