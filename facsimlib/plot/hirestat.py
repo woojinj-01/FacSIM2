@@ -5,6 +5,7 @@ import numpy as np
 import facsimlib.processing
 import facsimlib.math
 from facsimlib.plot.params import *
+from facsimlib.plot.palette import split_color_by
 
 
 def figure_hires():
