@@ -10,11 +10,17 @@ from facsimlib.academia import NodeSelect as NS
 from facsimlib.text import get_country_code, area_seoul, area_capital, area_metro, area_others, \
     con_america, con_europe, con_ocenaia, con_asia_without_kr, inst_ists
 from facsimlib.plot.params import *
+from facsimlib.plot.palette import split_color_by, palette_bio, palette_cs, palette_phy
+from facsimlib.plot.general import process_gini_coeff, sample_from_data
+
+palette_dict = {"Biology": palette_bio, "Computer Science": palette_cs, "Physics": palette_phy}
 
 
-def figure_doctorate_group():
+def figure_doctorate_group(palette):
 
-    fig_path = "./fig/doctorate_group.pdf"
+    assert palette in ['hatches', 'explicit', 'split']
+
+    fig_path = f"./fig/doctorate_group_{palette}.pdf"
 
     networks_dict = facsimlib.processing.construct_network()
     
@@ -35,33 +41,54 @@ def figure_doctorate_group():
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    _figure_doctorate_group(networks_dict["Biology"], ax[0])
-    _figure_doctorate_group(networks_dict["Computer Science"], ax[1])
-    _figure_doctorate_group(networks_dict["Physics"], ax[2])
+    pal_bio = _figure_doctorate_group(networks_dict["Biology"], ax[0], palette)
+    pal_cs = _figure_doctorate_group(networks_dict["Computer Science"], ax[1], palette)
+    pal_phy = _figure_doctorate_group(networks_dict["Physics"], ax[2], palette)
 
-    handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
-                Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
-                Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
-    
-    handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
-                Patch(edgecolor='black', hatch='O', facecolor='white'),
-                Patch(edgecolor='black', hatch='+', facecolor='white'),
-                Patch(edgecolor='black', hatch='-', facecolor='white'),
-                Patch(edgecolor='black', hatch='/', facecolor='white')]
+    if palette == 'hatches':
 
-    labels1 = ["Biology", "Computer Science", "Physics"]
-    labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
+        
+        handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
+                    Patch(edgecolor='black', hatch='O', facecolor='white'),
+                    Patch(edgecolor='black', hatch='+', facecolor='white'),
+                    Patch(edgecolor='black', hatch='-', facecolor='white'),
+                    Patch(edgecolor='black', hatch='/', facecolor='white')]
 
-    fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
-    fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
+        labels1 = ["Biology", "Computer Science", "Physics"]
+        labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+
+        fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
+        fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
+
+    else:
+
+        handles_bio = [Patch(facecolor=pal_bio[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
+        handles_cs = [Patch(facecolor=pal_cs[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
+        handles_phy = [Patch(facecolor=pal_phy[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
+        
+        labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+
+        labels_bio = [f"Biology ({root})" for root in labels_root]
+        labels_cs = [f"Computer Science ({root})" for root in labels_root]
+        labels_phy = [f"Physics ({root})" for root in labels_root]
+
+        handles = [h_field[i] for i in range(5) for h_field in [handles_bio, handles_cs, handles_phy]]
+        labels = [l_field[i] for i in range(5) for l_field in [labels_bio, labels_cs, labels_phy]]
+
+        fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=5, frameon=False)
 
     plt.tight_layout(pad=1)
     plt.savefig(fig_path, bbox_inches='tight')
     plt.clf()
 
 
-def _figure_doctorate_group(network, ax, use_hatches=True):
+def _figure_doctorate_group(network, ax, palette):
     
+    assert palette in ['hatches', 'explicit', 'split']
+
     num_group = 10
 
     total_count = {}
@@ -210,7 +237,7 @@ def _figure_doctorate_group(network, ax, use_hatches=True):
 
     ax.set_xticks(np.arange(0, 1.1, 0.25))
 
-    if use_hatches:
+    if palette == 'hatches':
 
         ax.barh(x_co, y_co_america, color=network.color, label='America',
                 hatch='*', alpha=param_alpha, edgecolor='black', linewidth=2)
@@ -224,71 +251,29 @@ def _figure_doctorate_group(network, ax, use_hatches=True):
                 hatch='/', alpha=param_alpha, edgecolor='black', linewidth=2)
         
         return None
+    
+    elif palette == 'explicit':
+        palette = palette_dict[network.name]
         
-    else:
-
+    elif palette == 'split':
         palette = split_color_by(network.color)
-
-        ax.barh(x_co, y_co_america, color=palette[0], label='America',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_asia, color=palette[1], left=y_co_america, label='Asia',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-
-        return palette
     
+    else:
+        return None
 
-def figure_doctorate_group_using_colors():
+    ax.barh(x_co, y_co_america, color=palette[0], label='America',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_asia, color=palette[1], left=y_co_america, label='Asia',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
 
-    fig_path = "./fig/doctorate_group_colors.pdf"
-
-    networks_dict = facsimlib.processing.construct_network()
+    return palette
     
-    for net in networks_dict.values():
-        net.copy_ranks_from(net.domestic.set_ranks())
-
-    plt.rc('font', **param_font)
-
-    fig, ax = plt.subplots(1, 3, figsize=(3 * param_fig_xsize, param_fig_ysize), dpi=200, sharey=True)
-    plt.subplots_adjust(left=0.1, right=0.9, bottom=0.1, top=0.9, wspace=0.4, hspace=0.4)
-    
-    plt.yticks(range(1, 11), fontsize=param_tick_size)
-    plt.gca().invert_yaxis()
-
-    x_label = "Number of Assistant Professors (Normalized)"
-    y_label = "Group"
-
-    ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
-    ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
-
-    palette_bio = _figure_doctorate_group(networks_dict["Biology"], ax[0], use_hatches=False)
-    palette_cs = _figure_doctorate_group(networks_dict["Computer Science"], ax[1], use_hatches=False)
-    palette_phy = _figure_doctorate_group(networks_dict["Physics"], ax[2], use_hatches=False)
-
-    handles_bio = [Patch(facecolor=palette_bio[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(palette_bio))]
-    handles_cs = [Patch(facecolor=palette_cs[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(palette_cs))]
-    handles_phy = [Patch(facecolor=palette_phy[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(palette_phy))]
-    
-    labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
-
-    labels_bio = [f"Biology ({root})" for root in labels_root]
-    labels_cs = [f"Computer Science ({root})" for root in labels_root]
-    labels_phy = [f"Physics ({root})" for root in labels_root]
-
-    handles = [h_field[i] for i in range(5) for h_field in [handles_bio, handles_cs, handles_phy]]
-    labels = [l_field[i] for i in range(5) for l_field in [labels_bio, labels_cs, labels_phy]]
-
-    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=5, frameon=False)
-
-    plt.tight_layout(pad=1)
-    plt.savefig(fig_path, bbox_inches='tight')
-    plt.clf()
-
 
 def figure_lorentz_curve_group():
     
@@ -409,9 +394,11 @@ def _figure_lorentz_curve_group(network, ax):
                     ha='center', va='center', fontsize=param_pannel_size, fontweight='bold')
             
 
-def figure_doctorate_region():
+def figure_doctorate_region(palette):
+
+    assert palette in ['hatches', 'explicit', 'split']
     
-    fig_path = "./fig/doctorate_region.pdf"
+    fig_path = f"./fig/doctorate_region_{palette}.pdf"
 
     networks_dict = facsimlib.processing.construct_network()
     
@@ -427,75 +414,53 @@ def figure_doctorate_region():
 
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    _figure_doctorate_region(networks_dict["Biology"], ax[0])
-    _figure_doctorate_region(networks_dict["Computer Science"], ax[1])
-    _figure_doctorate_region(networks_dict["Physics"], ax[2])
+    pal_bio = _figure_doctorate_region(networks_dict["Biology"], ax[0], palette=palette)
+    pal_cs = _figure_doctorate_region(networks_dict["Computer Science"], ax[1], palette=palette)
+    pal_phy = _figure_doctorate_region(networks_dict["Physics"], ax[2], palette=palette)
 
-    handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
-                Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
-                Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
-    
-    handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
-                Patch(edgecolor='black', hatch='O', facecolor='white'),
-                Patch(edgecolor='black', hatch='+', facecolor='white'),
-                Patch(edgecolor='black', hatch='-', facecolor='white'),
-                Patch(edgecolor='black', hatch='/', facecolor='white')]
+    if palette == 'hatches':
 
-    labels1 = ["Biology", "Computer Science", "Physics"]
-    labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
+        
+        handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
+                    Patch(edgecolor='black', hatch='O', facecolor='white'),
+                    Patch(edgecolor='black', hatch='+', facecolor='white'),
+                    Patch(edgecolor='black', hatch='-', facecolor='white'),
+                    Patch(edgecolor='black', hatch='/', facecolor='white')]
 
-    fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
-    fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
+        labels1 = ["Biology", "Computer Science", "Physics"]
+        labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
 
-    plt.tight_layout(pad=1)
-    plt.savefig(fig_path, bbox_inches='tight')
-    plt.clf()
+        fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
+        fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
 
+    else:
 
-def figure_doctorate_region_using_colors():
-    
-    fig_path = "./fig/doctorate_region_colors.pdf"
+        handles_bio = [Patch(facecolor=pal_bio[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
+        handles_cs = [Patch(facecolor=pal_cs[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
+        handles_phy = [Patch(facecolor=pal_phy[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
+        
+        labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
 
-    networks_dict = facsimlib.processing.construct_network()
-    
-    for net in networks_dict.values():
-        net.copy_ranks_from(net.domestic.set_ranks())
+        labels_bio = [f"Biology ({root})" for root in labels_root]
+        labels_cs = [f"Computer Science ({root})" for root in labels_root]
+        labels_phy = [f"Physics ({root})" for root in labels_root]
 
-    plt.rc('font', **param_font)
+        handles = [h_field[i] for i in range(5) for h_field in [handles_bio, handles_cs, handles_phy]]
+        labels = [l_field[i] for i in range(5) for l_field in [labels_bio, labels_cs, labels_phy]]
 
-    fig, ax = plt.subplots(1, 3, figsize=(3 * param_fig_xsize, param_fig_ysize), dpi=200, sharey=True)
-    plt.gca().invert_yaxis()
-
-    x_label = "Number of Assistant Professors (Normalized)"
-
-    ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
-
-    _figure_doctorate_region(networks_dict["Biology"], ax[0], using_hatches=False)
-    _figure_doctorate_region(networks_dict["Computer Science"], ax[1], using_hatches=False)
-    _figure_doctorate_region(networks_dict["Physics"], ax[2], using_hatches=False)
-
-    # handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
-    #             Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
-    #             Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
-    
-    # handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
-    #             Patch(edgecolor='black', hatch='O', facecolor='white'),
-    #             Patch(edgecolor='black', hatch='+', facecolor='white'),
-    #             Patch(edgecolor='black', hatch='-', facecolor='white'),
-    #             Patch(edgecolor='black', hatch='/', facecolor='white')]
-
-    # labels1 = ["Biology", "Computer Science", "Physics"]
-    # labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
-
-    # fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
-    # fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
+        fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=5, frameon=False)
 
     plt.tight_layout(pad=1)
     plt.savefig(fig_path, bbox_inches='tight')
     plt.clf()
 
 
-def _figure_doctorate_region(network, ax, using_hatches=True):
+def _figure_doctorate_region(network, ax, palette):
+
+    assert palette in ['hatches', 'explicit', 'split']
 
     ns_list = [NS('region', area_seoul, 'in', label="Seoul"),
                NS('region', area_capital, 'in', label="Capital Area"),
@@ -593,7 +558,7 @@ def _figure_doctorate_region(network, ax, using_hatches=True):
 
     ax.set_xticks(np.arange(0, 1.1, 0.25))
 
-    if using_hatches:
+    if palette == 'hatches':
     
         ax.barh(x_co, y_co_america, color=network.color, label='America',
                 hatch='*', alpha=param_alpha, edgecolor='black', linewidth=2)
@@ -605,21 +570,30 @@ def _figure_doctorate_region(network, ax, using_hatches=True):
                 hatch='-', alpha=param_alpha, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_kr, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
                 hatch='/', alpha=param_alpha, edgecolor='black', linewidth=2)
+        
+        return None
 
-    else:
-
+    elif palette == 'explicit':
+        palette = palette_dict[network.name]
+    
+    elif palette == 'split':
         palette = split_color_by(network.color)
 
-        ax.barh(x_co, y_co_america, color=palette[0], label='America',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_asia, color=palette[1], label='Asia', left=y_co_america,
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-                alpha=param_alpha, edgecolor='black', linewidth=2)
+    else:
+        return None
+
+    ax.barh(x_co, y_co_america, color=palette[0], label='America',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_asia, color=palette[1], label='Asia', left=y_co_america,
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
+            alpha=param_alpha, edgecolor='black', linewidth=2)
+    
+    return palette
 
 
 def figure_lorentz_curve_region():
@@ -765,3 +739,15 @@ def _figure_lorentz_curve_region(network, ax):
         else:
             if label == "Korea":
                 _put_gini_coeff(0.1)
+
+
+if __name__ == "__main__":
+    
+    figure_doctorate_group(palette='hatches')
+    figure_doctorate_group(palette='explicit')
+    figure_doctorate_group(palette='split')
+
+    figure_doctorate_region(palette='hatches')
+    figure_doctorate_region(palette='explicit')
+    figure_doctorate_region(palette='split')
+
