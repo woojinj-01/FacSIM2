@@ -2,6 +2,8 @@ results/*
 !results/.gitkeep
 data/*
 !data/.gitkeep
+fig/*
+!fig/.gitkeep
 facsimlib/__pycache__
 script/__pycache__
 results.txt
