@@ -7,8 +7,6 @@ import matplotlib.ticker as ticker
 import matplotlib as mpl
 import numpy as np
 import math
-from pdf2image import convert_from_path
-from matplotlib.backends.backend_pdf import PdfPages
 from scipy.interpolate import interp1d
 import colorsys
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
