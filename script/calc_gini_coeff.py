@@ -1,5 +1,5 @@
 from facsimlib.processing import construct_network
-from facsimlib.figure import process_gini_coeff
+from facsimlib.plot import process_gini_coeff
 
 if __name__ == "__main__":
 

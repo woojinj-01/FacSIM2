@@ -1,4 +1,4 @@
-import facsimlib.figure as facfig
+import facsimlib.plot as facfig
 
 if __name__ == "__main__":
 

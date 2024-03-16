@@ -1,7 +1,7 @@
 from facsimlib.processing import construct_network
 from facsimlib.academia import NodeSelect as NS
 from facsimlib.text import con_america, con_europe, con_ocenaia, con_asia_without_kr
-from facsimlib.figure import param_alpha, split_color_by
+from facsimlib.plot import param_alpha, split_color_by
 
 import numpy as np
 import matplotlib.pyplot as plt

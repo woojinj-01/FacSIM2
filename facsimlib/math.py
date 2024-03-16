@@ -219,13 +219,3 @@ def calc_sparsity(network: Field):
     total_elem = adj_mat.size
 
     return num_zeros / total_elem
-
-
-if (__name__ == "__main__"):
-    
-    network_dict = construct_network()
-
-    for net in network_dict.values():
-
-        print(net.name)
-        print(up_down_hires_adv(net))

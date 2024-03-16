@@ -7,7 +7,6 @@ import numpy as np
 import math
 from pdf2image import convert_from_path
 from matplotlib.backends.backend_pdf import PdfPages
-from PIL import Image
 from scipy.interpolate import interp1d
 import colorsys
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -182,95 +181,6 @@ def sample_from_data(x_co, y_co, x_co_sample):
     line_eq = _straight_line_equation((lowXCo, lowYCo), (highXCo, highYCo))
 
     return line_eq(x_co_sample)
-
-
-def figure_1():
-
-    figure_lorentz_curve()
-
-
-def figure_2():
-
-    figure_rank_variation()
-
-
-def figure_3():
-
-    files = ["./fig/doctorate_group_colors.pdf", "./fig/lorentz_curve_group.pdf"]
-
-    combine_and_put_labels_v2(files, result_name="./fig/figure_3.pdf")
-
-
-def figure_4():
-
-    files = ["./fig/doctorate_reigon.pdf", "./fig/lorentz_curve_region.pdf"]
-
-    combine_and_put_labels(files, result_name="./fig/figure_4.pdf")
-
-
-def combine_and_put_labels(pdf_files, result_name="./result.pdf", dir="vertical"):
-
-    def _add_labels_to_figures(axs, labels):
-        for ax, label in zip(axs, labels):
-            ax.text(0.02, 0.98, label, ha='left', va='top', fontsize=12, transform=ax.transAxes)
-
-    images = []
-
-    for file in pdf_files:
-        pages = convert_from_path(file, dpi=200)
-        images.append(pages[0])
-
-    plt.rc('font', **param_font)
-
-    if dir == "vertical":
-        fig, axs = plt.subplots(len(images), 1, figsize=(param_fig_xsize * len(images), param_fig_ysize), dpi=200, constrained_layout=True)
-
-    else:
-        fig, axs = plt.subplots(1, len(images), figsize=(param_fig_xsize, param_fig_ysize * len(images)), dpi=200, constrained_layout=True)
-
-    for i, img in enumerate(images):
-        axs[i].imshow(img)
-
-    # _add_labels_to_figures(axs, ['a)', 'b)', 'c)'])
-
-    for i, ax in enumerate(axs.flat):
-
-        label = f"({chr(97 + i)})"
-        ax.text(-0.02, 1.01, label, transform=ax.transAxes, fontsize=param_pannel_size, fontweight='bold', va='top')
-
-    for ax in axs:
-        ax.axis('off')
-
-    plt.tight_layout(pad=1)
-    plt.savefig(result_name, bbox_inches='tight')
-
-    plt.clf()
-
-
-def combine_and_put_labels_v2(pdf_files, result_name="./result.pdf", dir="vertical"):
-    images = []
-
-    for file in pdf_files:
-        pages = convert_from_path(file, dpi=200)
-        images.append(pages[0])
-
-    plt.rc('font', **param_font)
-
-    if dir == "vertical":
-        fig, axs = plt.subplots(len(images), 1, figsize=(param_fig_xsize * len(images), param_fig_ysize), dpi=200, constrained_layout=True)
-    else:
-        fig, axs = plt.subplots(1, len(images), figsize=(param_fig_xsize, param_fig_ysize * len(images)), dpi=200, constrained_layout=True)
-
-    for i, img in enumerate(images):
-        axs[i].imshow(img)
-        axs[i].axis('off')
-        label = f"({chr(97 + i)})"
-        axs[i].text(-0.02, 1.01, label, transform=axs[i].transAxes, fontsize=param_pannel_size, fontweight='bold', va='top')
-
-    with PdfPages(result_name) as pdf:
-        plt.savefig(pdf, format='pdf', bbox_inches='tight')
-
-    plt.clf()
 
 
 def figure_lorentz_curve():
