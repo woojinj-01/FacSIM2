@@ -1,4 +1,5 @@
-./results
+results/*
+!results/.gitkeep
 data/*
 !data/.gitkeep
 facsimlib/__pycache__
