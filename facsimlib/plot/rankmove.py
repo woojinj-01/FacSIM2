@@ -689,3 +689,7 @@ def _figure_rank_move_of_ns(network, ax, ns, alpha=param_alpha, style='-', norma
         y_interp = [y * ratio for y in y_interp]
 
     ax.plot(x_interp, y_interp, color=network.color, linewidth=5, alpha=alpha, linestyle=style)
+
+
+if __name__ == "__main__":
+    figure_rank_move_phdnation()

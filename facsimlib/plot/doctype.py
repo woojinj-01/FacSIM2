@@ -15,12 +15,19 @@ from facsimlib.plot.general import process_gini_coeff, sample_from_data
 
 palette_dict = {"Biology": palette_bio, "Computer Science": palette_cs, "Physics": palette_phy}
 
+explicit_alpha = 1
+
 
 def figure_doctorate_group(palette):
 
     assert palette in ['hatches', 'explicit', 'split']
 
     fig_path = f"./fig/doctorate_group_{palette}.pdf"
+
+    if palette == 'explicit':
+        alpha_to_use = explicit_alpha
+    else:
+        alpha_to_use = param_alpha
 
     networks_dict = facsimlib.processing.construct_network()
     
@@ -47,9 +54,9 @@ def figure_doctorate_group(palette):
 
     if palette == 'hatches':
 
-        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
-                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
-                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
+        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=alpha_to_use, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=alpha_to_use, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=alpha_to_use, edgecolor='black', linewidth=3)]
         
         handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
                     Patch(edgecolor='black', hatch='O', facecolor='white'),
@@ -65,9 +72,9 @@ def figure_doctorate_group(palette):
 
     else:
 
-        handles_bio = [Patch(facecolor=pal_bio[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
-        handles_cs = [Patch(facecolor=pal_cs[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
-        handles_phy = [Patch(facecolor=pal_phy[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
+        handles_bio = [Patch(facecolor=pal_bio[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
+        handles_cs = [Patch(facecolor=pal_cs[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
+        handles_phy = [Patch(facecolor=pal_phy[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
         
         labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
 
@@ -88,6 +95,11 @@ def figure_doctorate_group(palette):
 def _figure_doctorate_group(network, ax, palette):
     
     assert palette in ['hatches', 'explicit', 'split']
+
+    if palette == 'explicit':
+        alpha_to_use = explicit_alpha
+    else:
+        alpha_to_use = param_alpha
 
     num_group = 10
 
@@ -240,15 +252,15 @@ def _figure_doctorate_group(network, ax, palette):
     if palette == 'hatches':
 
         ax.barh(x_co, y_co_america, color=network.color, label='America',
-                hatch='*', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='*', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_asia, color=network.color, left=y_co_america, label='Asia',
-                hatch='O', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='O', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_europe, color=network.color, left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-                hatch='+', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='+', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_oceania, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-                hatch='-', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='-', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_kr, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-                hatch='/', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='/', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         
         return None
     
@@ -262,15 +274,15 @@ def _figure_doctorate_group(network, ax, palette):
         return None
 
     ax.barh(x_co, y_co_america, color=palette[0], label='America',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_asia, color=palette[1], left=y_co_america, label='Asia',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
 
     return palette
     
@@ -400,6 +412,11 @@ def figure_doctorate_region(palette):
     
     fig_path = f"./fig/doctorate_region_{palette}.pdf"
 
+    if palette == 'explicit':
+        alpha_to_use = explicit_alpha
+    else:
+        alpha_to_use = param_alpha
+
     networks_dict = facsimlib.processing.construct_network()
     
     for net in networks_dict.values():
@@ -420,9 +437,9 @@ def figure_doctorate_region(palette):
 
     if palette == 'hatches':
 
-        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
-                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
-                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=param_alpha, edgecolor='black', linewidth=3)]
+        handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=alpha_to_use, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=alpha_to_use, edgecolor='black', linewidth=3),
+                    Patch(facecolor=networks_dict["Physics"].color, label="Physics", alpha=alpha_to_use, edgecolor='black', linewidth=3)]
         
         handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
                     Patch(edgecolor='black', hatch='O', facecolor='white'),
@@ -438,9 +455,9 @@ def figure_doctorate_region(palette):
 
     else:
 
-        handles_bio = [Patch(facecolor=pal_bio[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
-        handles_cs = [Patch(facecolor=pal_cs[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
-        handles_phy = [Patch(facecolor=pal_phy[i], alpha=param_alpha, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
+        handles_bio = [Patch(facecolor=pal_bio[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_bio))]
+        handles_cs = [Patch(facecolor=pal_cs[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
+        handles_phy = [Patch(facecolor=pal_phy[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
         
         labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
 
@@ -461,6 +478,11 @@ def figure_doctorate_region(palette):
 def _figure_doctorate_region(network, ax, palette):
 
     assert palette in ['hatches', 'explicit', 'split']
+
+    if palette == 'explicit':
+        alpha_to_use = explicit_alpha
+    else:
+        alpha_to_use = param_alpha
 
     ns_list = [NS('region', area_seoul, 'in', label="Seoul"),
                NS('region', area_capital, 'in', label="Capital Area"),
@@ -561,15 +583,15 @@ def _figure_doctorate_region(network, ax, palette):
     if palette == 'hatches':
     
         ax.barh(x_co, y_co_america, color=network.color, label='America',
-                hatch='*', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='*', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_asia, color=network.color, label='Asia', left=y_co_america, 
-                hatch='O', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='O', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_europe, color=network.color, left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-                hatch='+', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='+', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_oceania, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-                hatch='-', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='-', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         ax.barh(x_co, y_co_kr, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-                hatch='/', alpha=param_alpha, edgecolor='black', linewidth=2)
+                hatch='/', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         
         return None
 
@@ -583,15 +605,15 @@ def _figure_doctorate_region(network, ax, palette):
         return None
 
     ax.barh(x_co, y_co_america, color=palette[0], label='America',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_asia, color=palette[1], label='Asia', left=y_co_america,
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
-            alpha=param_alpha, edgecolor='black', linewidth=2)
+            alpha=alpha_to_use, edgecolor='black', linewidth=2)
     
     return palette
 
