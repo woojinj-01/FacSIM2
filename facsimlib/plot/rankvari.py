@@ -3,6 +3,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 import matplotlib as mpl
 import numpy as np
+import scipy.stats
 
 import facsimlib.processing
 import facsimlib.math
@@ -549,7 +550,7 @@ def _figure_rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_co
             z_score = (emp_data - rand_mean) / rand_std
 
             if z_score > 5:
-                print(f"{network.name}: {domestic_ranks[key]}")
+                print(f"Large Z: {network.name}: {domestic_ranks[key]}")
                 
                 to_delete.append(key)
                 continue
@@ -573,14 +574,11 @@ def _figure_rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_co
 
     ax.scatter(ratio_foreign, z_scores, s=200, marker=marker, c=network.color, alpha=param_alpha)
 
-    # lin_co = np.arange(0, 1, 0.05)
-
-    # ax.plot(lin_co, poly1d_func(lin_co), c='red', alpha=param_alpha)
-
-    # sorted_data = sorted(zip(x_co, stds))
-    # x_co_sorted, stds_sorted = zip(*sorted_data)
-
-    # ax.plot(x_co_sorted, stds_sorted, marker='s', c='red', linestyle='--', alpha=param_alpha)
+    print(f"=== Correlations: {network.name}")
+    print(scipy.stats.pearsonr(ratio_foreign, z_scores))
+    print(scipy.stats.spearmanr(ratio_foreign, z_scores))
+    print(scipy.stats.kendalltau(ratio_foreign, z_scores))
+    print("\n")
 
 
 def _figure_rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker='x', to_compare=None):
@@ -684,3 +682,7 @@ def _figure_rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker=
     ax.scatter(ratio_foreign, num_foreign, s=400, c=z_scores, marker=marker, edgecolor='black', cmap=cmap)
 
     return z_scores
+
+
+if __name__ == "__main__":
+    figure_rank_variation_random_zscore_vs_ratio()
