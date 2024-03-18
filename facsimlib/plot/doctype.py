@@ -15,7 +15,7 @@ from facsimlib.plot.general import process_gini_coeff, sample_from_data
 
 palette_dict = {"Biology": palette_bio, "Computer Science": palette_cs, "Physics": palette_phy}
 
-explicit_alpha = 1
+explicit_alpha = param_alpha
 
 
 def figure_doctorate_group(palette):
@@ -61,11 +61,10 @@ def figure_doctorate_group(palette):
         handles2 = [Patch(edgecolor='black', hatch='*', facecolor='white'),
                     Patch(edgecolor='black', hatch='O', facecolor='white'),
                     Patch(edgecolor='black', hatch='+', facecolor='white'),
-                    Patch(edgecolor='black', hatch='-', facecolor='white'),
                     Patch(edgecolor='black', hatch='/', facecolor='white')]
 
         labels1 = ["Biology", "Computer Science", "Physics"]
-        labels2 = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+        labels2 = ["America", "Asia & Oceania", "Europe", "South Korea"]
 
         fig.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=3, frameon=False)
         fig.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 1.045), ncol=5, frameon=False)
@@ -76,16 +75,16 @@ def figure_doctorate_group(palette):
         handles_cs = [Patch(facecolor=pal_cs[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_cs))]
         handles_phy = [Patch(facecolor=pal_phy[i], alpha=alpha_to_use, edgecolor='black', linewidth=3) for i in range(len(pal_phy))]
         
-        labels_root = ["America", "Asia", "Europe", "Oceania", "South Korea"]
+        labels_root = ["America", "Asia & Oceania", "Europe", "South Korea"]
 
         labels_bio = [f"Biology ({root})" for root in labels_root]
         labels_cs = [f"Computer Science ({root})" for root in labels_root]
         labels_phy = [f"Physics ({root})" for root in labels_root]
 
-        handles = [h_field[i] for i in range(5) for h_field in [handles_bio, handles_cs, handles_phy]]
-        labels = [l_field[i] for i in range(5) for l_field in [labels_bio, labels_cs, labels_phy]]
+        handles = [h_field[i] for i in range(4) for h_field in [handles_bio, handles_cs, handles_phy]]
+        labels = [l_field[i] for i in range(4) for l_field in [labels_bio, labels_cs, labels_phy]]
 
-        fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=5, frameon=False)
+        fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.17), ncol=4, frameon=False)
 
     plt.tight_layout(pad=1)
     plt.savefig(fig_path, bbox_inches='tight')
@@ -106,10 +105,9 @@ def _figure_doctorate_group(network, ax, palette):
     total_count = {}
 
     kr_count = {}
-    asia_count = {}
+    asia_oceania__count = {}
     america_count = {}
     europe_count = {}
-    oceania_count = {}
 
     ns_korea = NS('country_code', ["KR", "KOREA"], 'in', label="Korea")
     ns_asia = NS('country_code', con_asia_without_kr, 'in', label="Asia")
@@ -128,10 +126,9 @@ def _figure_doctorate_group(network, ax, palette):
 
         total_count[rank] = len(edges_in)
         kr_count[rank] = 0
-        asia_count[rank] = 0
+        asia_oceania__count[rank] = 0
         america_count[rank] = 0
         europe_count[rank] = 0
-        oceania_count[rank] = 0
 
         for src, dst, data in edges_in:
 
@@ -139,7 +136,7 @@ def _figure_doctorate_group(network, ax, palette):
                 kr_count[rank] += 1
 
             elif ((ns_asia.hit(network.net.nodes[src]))):
-                asia_count[rank] += 1
+                asia_oceania__count[rank] += 1
 
             elif ((ns_america.hit(network.net.nodes[src]))):
                 america_count[rank] += 1
@@ -148,100 +145,85 @@ def _figure_doctorate_group(network, ax, palette):
                 europe_count[rank] += 1
 
             elif ((ns_oceania.hit(network.net.nodes[src]))):
-                oceania_count[rank] += 1
+                asia_oceania__count[rank] += 1
 
     ranks_sorted = [key for key, _ in sorted(total_count.items())]
     kr_count_sorted = [value for _, value in sorted(kr_count.items())]
-    asia_count_sorted = [value for _, value in sorted(asia_count.items())]
+    asia_oceania_count_sorted = [value for _, value in sorted(asia_oceania__count.items())]
     america_count_sorted = [value for _, value in sorted(america_count.items())]
     europe_count_sorted = [value for _, value in sorted(europe_count.items())]
-    oceania_count_sorted = [value for _, value in sorted(oceania_count.items())]
 
-    grousize = np.floor(len(ranks_sorted) / num_group)
+    groupsize = np.floor(len(ranks_sorted) / num_group)
 
-    if (grousize == 1):
+    if (groupsize == 1):
 
         x_co = ranks_sorted
         y_co_kr = kr_count_sorted
-        y_co_asia = asia_count_sorted
+        y_co_asia_oceania = asia_oceania_count_sorted
         y_co_america = america_count_sorted
         y_co_europe = europe_count_sorted
-        y_co_oceania = oceania_count_sorted
 
     else:
         
         x_co = []
 
         y_co_kr = []
-        y_co_asia = []
+        y_co_asia_oceania = []
         y_co_america = []
         y_co_europe = []
-        y_co_oceania = []
         
         index = 0
-        grouid = 1
+        groupid = 1
 
-        while index < num_group * grousize:
+        while index < num_group * groupsize:
 
             elements_kr = []
-            elements_asia = []
+            elements_asia_oceania = []
             elements_america = []
             elements_europe = []
-            elements_oceania = []
 
-            while (grousize > len(elements_kr)):
+            while (groupsize > len(elements_kr)):
 
                 elements_kr.append(kr_count_sorted[index])
-                elements_asia.append(asia_count_sorted[index])
+                elements_asia_oceania.append(asia_oceania_count_sorted[index])
                 elements_america.append(america_count_sorted[index])
                 elements_europe.append(europe_count_sorted[index])
-                elements_oceania.append(oceania_count_sorted[index])
 
                 index += 1
 
                 if (index >= len(ranks_sorted)):
                     break
 
-            x_co.append(grouid)
+            x_co.append(groupid)
 
             y_co_kr.append(sum(elements_kr))
-            y_co_asia.append(sum(elements_asia))
+            y_co_asia_oceania.append(sum(elements_asia_oceania))
             y_co_america.append(sum(elements_america))
             y_co_europe.append(sum(elements_europe))
-            y_co_oceania.append(sum(elements_oceania))
 
-            grouid += 1
+            groupid += 1
 
         while index < len(ranks_sorted):
 
             y_co_kr[-1] += kr_count_sorted[index]
-            y_co_asia[-1] += asia_count_sorted[index]
+            y_co_asia_oceania[-1] += asia_oceania_count_sorted[index]
             y_co_america[-1] += america_count_sorted[index]
             y_co_europe[-1] += europe_count_sorted[index]
-            y_co_oceania[-1] += oceania_count_sorted[index]
 
             index += 1
 
-    y_co_kr_norm = [y_co_kr[i] / (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i])\
-                    if (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i]) != 0 else 0 for i in range(len(x_co))]
-    
-    y_co_asia_norm = [y_co_asia[i] / (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i])\
-                      if (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i]) != 0 else 0 for i in range(len(x_co))]
-    
-    y_co_america_norm = [y_co_america[i] / (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i])\
-                         if (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i]) != 0 else 0 for i in range(len(x_co))]
-    
-    y_co_europe_norm = [y_co_europe[i] / (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i])\
-                        if (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i]) != 0 else 0 for i in range(len(x_co))]
-    
-    y_co_oceania_norm = [y_co_oceania[i] / (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i])\
-                         if (y_co_kr[i] + y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i]) != 0 else 0 for i in range(len(x_co))]
+    def sum_of_the_lists(i):
+        return y_co_kr[i] + y_co_asia_oceania[i] + y_co_america[i] + y_co_europe[i]
+
+    y_co_kr_norm = [y_co_kr[i] / sum_of_the_lists(i) if sum_of_the_lists(i) != 0 else 0 for i in range(len(x_co))]
+    y_co_asia_oceania_norm = [y_co_asia_oceania[i] / sum_of_the_lists(i) if sum_of_the_lists(i) != 0 else 0 for i in range(len(x_co))]
+    y_co_america_norm = [y_co_america[i] / sum_of_the_lists(i) if sum_of_the_lists(i) != 0 else 0 for i in range(len(x_co))]
+    y_co_europe_norm = [y_co_europe[i] / sum_of_the_lists(i) if sum_of_the_lists(i) != 0 else 0 for i in range(len(x_co))]
 
     y_co_kr = y_co_kr_norm
-    y_co_asia = y_co_asia_norm
+    y_co_asia_oceania = y_co_asia_oceania_norm
     y_co_america = y_co_america_norm
     y_co_europe = y_co_europe_norm
-    y_co_oceania = y_co_oceania_norm
 
     ax.tick_params(axis='both', which='major', labelsize=param_tick_size)
 
@@ -251,37 +233,33 @@ def _figure_doctorate_group(network, ax, palette):
 
     if palette == 'hatches':
 
-        ax.barh(x_co, y_co_america, color=network.color, label='America',
+        ax.barh(x_co, y_co_america, color=network.color,
                 hatch='*', alpha=alpha_to_use, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_asia, color=network.color, left=y_co_america, label='Asia',
+        ax.barh(x_co, y_co_asia_oceania, color=network.color, left=y_co_america,
                 hatch='O', alpha=alpha_to_use, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_europe, color=network.color, left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
+        ax.barh(x_co, y_co_europe, color=network.color, left=[y_co_asia_oceania[i] + y_co_america[i] for i in range(len(y_co_asia_oceania))],
                 hatch='+', alpha=alpha_to_use, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_oceania, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-                hatch='-', alpha=alpha_to_use, edgecolor='black', linewidth=2)
-        ax.barh(x_co, y_co_kr, color=network.color, left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
+        ax.barh(x_co, y_co_kr, color=network.color, left=[y_co_asia_oceania[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia_oceania))],
                 hatch='/', alpha=alpha_to_use, edgecolor='black', linewidth=2)
         
         return None
     
     elif palette == 'explicit':
-        palette = palette_dict[network.name]
+
+        explicit_palette_chosen = palette_dict[network.name]
+        palette = explicit_palette_chosen[:2] + explicit_palette_chosen[3:]
         
     elif palette == 'split':
-        palette = split_color_by(network.color)
+        palette = split_color_by(network.color, 4)
     
     else:
         return None
 
-    ax.barh(x_co, y_co_america, color=palette[0], label='America',
+    ax.barh(x_co, y_co_america, color=palette[0], alpha=alpha_to_use, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_asia_oceania, color=palette[1], left=y_co_america, alpha=alpha_to_use, edgecolor='black', linewidth=2)
+    ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia_oceania[i] + y_co_america[i] for i in range(len(y_co_asia_oceania))],
             alpha=alpha_to_use, edgecolor='black', linewidth=2)
-    ax.barh(x_co, y_co_asia, color=palette[1], left=y_co_america, label='Asia',
-            alpha=alpha_to_use, edgecolor='black', linewidth=2)
-    ax.barh(x_co, y_co_europe, color=palette[2], left=[y_co_asia[i] + y_co_america[i] for i in range(len(y_co_asia))], label='Europe',
-            alpha=alpha_to_use, edgecolor='black', linewidth=2)
-    ax.barh(x_co, y_co_oceania, color=palette[3], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia))], label='Oceania',
-            alpha=alpha_to_use, edgecolor='black', linewidth=2)
-    ax.barh(x_co, y_co_kr, color=palette[4], left=[y_co_asia[i] + y_co_america[i] + y_co_europe[i] + y_co_oceania[i] for i in range(len(y_co_asia))], label='South Korea',
+    ax.barh(x_co, y_co_kr, color=palette[3], left=[y_co_asia_oceania[i] + y_co_america[i] + y_co_europe[i] for i in range(len(y_co_asia_oceania))],
             alpha=alpha_to_use, edgecolor='black', linewidth=2)
 
     return palette
@@ -769,7 +747,7 @@ if __name__ == "__main__":
     figure_doctorate_group(palette='explicit')
     figure_doctorate_group(palette='split')
 
-    figure_doctorate_region(palette='hatches')
-    figure_doctorate_region(palette='explicit')
-    figure_doctorate_region(palette='split')
+    # figure_doctorate_region(palette='hatches')
+    # figure_doctorate_region(palette='explicit')
+    # figure_doctorate_region(palette='split')
 
