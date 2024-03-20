@@ -15,7 +15,7 @@ from facsimlib.plot.general import process_gini_coeff, sample_from_data
 
 palette_dict = {"Biology": palette_bio, "Computer Science": palette_cs, "Physics": palette_phy}
 
-explicit_alpha = param_alpha
+explicit_alpha = 1
 
 
 def figure_doctorate_group(palette):
@@ -735,10 +735,10 @@ def _figure_lorentz_curve_region(network, ax):
 if __name__ == "__main__":
     
     # figure_doctorate_group(palette='hatches')
-    # figure_doctorate_group(palette='explicit')
+    figure_doctorate_group(palette='explicit')
     # figure_doctorate_group(palette='split')
 
-    figure_doctorate_region(palette='hatches')
+    # figure_doctorate_region(palette='hatches')
     figure_doctorate_region(palette='explicit')
-    figure_doctorate_region(palette='split')
+    # figure_doctorate_region(palette='split')
 
