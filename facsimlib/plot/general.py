@@ -103,7 +103,7 @@ def sample_from_data(x_co, y_co, x_co_sample):
     return line_eq(x_co_sample)
 
 
-def figure_lorentz_curve():
+def lorentz_curve():
 
     fig_path = "./fig/lorentz_curve.pdf"
 
@@ -114,13 +114,8 @@ def figure_lorentz_curve():
 
     fig, ax = plt.subplots(1, 2, figsize=(2 * param_fig_xsize, param_fig_ysize), dpi=200)
 
-    _figure_lorentz_curve(networks_global, ax[0])
-    _figure_lorentz_curve(networks_domestic, ax[1])
-
-    for i, ax in enumerate(ax.flat):
-
-        label = f"({chr(97 + i)})"
-        ax.text(-0.2, 1.1, label, transform=ax.transAxes, fontsize=param_pannel_size, fontweight='bold', va='top')
+    _lorentz_curve(networks_global, ax[0])
+    _lorentz_curve(networks_domestic, ax[1])
 
     handles = [Patch(facecolor=networks_global["Biology"].color, label="Biology",
                      alpha=param_alpha, edgecolor='black', linewidth=3),
@@ -138,7 +133,7 @@ def figure_lorentz_curve():
     plt.clf()
 
 
-def _figure_lorentz_curve(network_dict, ax):
+def _lorentz_curve(network_dict, ax):
 
     div_10per = [i for i in range(0, 101, 20)]
 
@@ -162,7 +157,7 @@ def _figure_lorentz_curve(network_dict, ax):
 
         ax.plot(x_co, y_co, color=net.color, linewidth=3, alpha=param_alpha)
         ax.scatter(div_10per, [sample_from_data(x_co, y_co, index) for index in div_10per],
-                   c=net.color, s=30, clion=False, alpha=1, marker='o')
+                   c=net.color, s=30, clip_on=False, alpha=1, marker='o')
 
         ax.plot(base_co, base_co, color='black', linewidth=0.5)
 

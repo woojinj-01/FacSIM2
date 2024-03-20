@@ -7,6 +7,8 @@ from facsimlib.academia import Institution as Inst
 from facsimlib.academia import Move, Field
 from facsimlib.math import calc_sparsity
 
+up_to_date = '240320'
+
 cache_file_pattern = re.compile(r'^~\$')
 masked_file_pattern = re.compile(r'^X_')
 xlsx_file_pattern = re.compile(r'\.xlsx$')
@@ -95,9 +97,15 @@ class RowIterator:
 
 def _filter_file(target_dir):
 
-    if (os.path.isdir(target_dir) is False):
+    full_path = f"./data/{target_dir}"
 
-        print(f"Target directory {target_dir} doesn't exist.")
+    if os.path.isdir("data") is False:
+        print("./data doesn't exist.")
+        return 0
+
+    elif (os.path.isdir(full_path) is False):
+
+        print(f"Target directory {full_path} doesn't exist.")
         return 0
     
     # file_list_origin = [".xlsx", "A_BB_CC.xlsx", "A_.xlsx", "XX_A_CC.xlsx", "~$name.xlsx"]
@@ -105,7 +113,7 @@ def _filter_file(target_dir):
     # os.listdir(target_dir)
 
     file_list = [
-        f"./{target_dir}/{file_name}" for file_name in os.listdir(target_dir)
+        f"{full_path}/{file_name}" for file_name in os.listdir(full_path)
         if not any(pattern.match(file_name) for pattern in [cache_file_pattern, masked_file_pattern])
         and xlsx_file_pattern.search(file_name)
         and underscore_pattern.search(file_name)
@@ -240,12 +248,14 @@ def process_row(iterator, row, network):
     return all_set
 
 
-def construct_network(net_type='global'):
+def construct_network(net_type='global', data=up_to_date):
 
     if net_type not in ['global', 'domestic']:
         return None
+    elif not isinstance(data, str):
+        return None
 
-    prep_list = preprocess("data")
+    prep_list = preprocess(data)
     network_dict = {}
 
     for field, df_list in prep_list:

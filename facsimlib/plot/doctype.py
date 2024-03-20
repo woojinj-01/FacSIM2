@@ -18,7 +18,7 @@ palette_dict = {"Biology": palette_bio, "Computer Science": palette_cs, "Physics
 explicit_alpha = 1
 
 
-def figure_doctorate_group(palette):
+def doctorate_group(palette='explicit'):
 
     assert palette in ['hatches', 'explicit', 'split']
 
@@ -48,9 +48,9 @@ def figure_doctorate_group(palette):
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    pal_bio = _figure_doctorate_group(networks_dict["Biology"], ax[0], palette)
-    pal_cs = _figure_doctorate_group(networks_dict["Computer Science"], ax[1], palette)
-    pal_phy = _figure_doctorate_group(networks_dict["Physics"], ax[2], palette)
+    pal_bio = _doctorate_group(networks_dict["Biology"], ax[0], palette)
+    pal_cs = _doctorate_group(networks_dict["Computer Science"], ax[1], palette)
+    pal_phy = _doctorate_group(networks_dict["Physics"], ax[2], palette)
 
     if palette == 'hatches':
 
@@ -91,7 +91,7 @@ def figure_doctorate_group(palette):
     plt.clf()
 
 
-def _figure_doctorate_group(network, ax, palette):
+def _doctorate_group(network, ax, palette):
     
     assert palette in ['hatches', 'explicit', 'split']
 
@@ -265,7 +265,7 @@ def _figure_doctorate_group(network, ax, palette):
     return palette
     
 
-def figure_lorentz_curve_group():
+def lorentz_curve_group():
     
     fig_path = "./fig/lorentz_curve_group.pdf"
 
@@ -288,9 +288,9 @@ def figure_lorentz_curve_group():
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    _figure_lorentz_curve_group(networks_dict["Biology"], ax[0])
-    _figure_lorentz_curve_group(networks_dict["Computer Science"], ax[1])
-    _figure_lorentz_curve_group(networks_dict["Physics"], ax[2])
+    _lorentz_curve_group(networks_dict["Biology"], ax[0])
+    _lorentz_curve_group(networks_dict["Computer Science"], ax[1])
+    _lorentz_curve_group(networks_dict["Physics"], ax[2])
 
     handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
                 Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
@@ -311,7 +311,7 @@ def figure_lorentz_curve_group():
     plt.clf()
 
 
-def _figure_lorentz_curve_group(network, ax):
+def _lorentz_curve_group(network, ax):
 
     div_10per = [i for i in range(0, 101, 20)]
 
@@ -354,7 +354,7 @@ def _figure_lorentz_curve_group(network, ax):
 
         ax.plot(x_co, y_co, color=network.color, linewidth=3, alpha=param_alpha, linestyle=style)
         ax.scatter(div_10per, [sample_from_data(x_co, y_co, index) for index in div_10per],
-                   c=network.color, s=30, clion=False, alpha=1, marker='o')
+                   c=network.color, s=30, clip_on=False, alpha=1, marker='o')
 
         ax.plot(base_co, base_co, color='black', linewidth=0.5)
 
@@ -384,7 +384,7 @@ def _figure_lorentz_curve_group(network, ax):
                     ha='center', va='center', fontsize=param_pannel_size, fontweight='bold')
             
 
-def figure_doctorate_region(palette):
+def doctorate_region(palette='explicit'):
 
     assert palette in ['hatches', 'explicit', 'split']
     
@@ -409,9 +409,9 @@ def figure_doctorate_region(palette):
 
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    pal_bio = _figure_doctorate_region(networks_dict["Biology"], ax[0], palette=palette)
-    pal_cs = _figure_doctorate_region(networks_dict["Computer Science"], ax[1], palette=palette)
-    pal_phy = _figure_doctorate_region(networks_dict["Physics"], ax[2], palette=palette)
+    pal_bio = _doctorate_region(networks_dict["Biology"], ax[0], palette=palette)
+    pal_cs = _doctorate_region(networks_dict["Computer Science"], ax[1], palette=palette)
+    pal_phy = _doctorate_region(networks_dict["Physics"], ax[2], palette=palette)
 
     if palette == 'hatches':
 
@@ -453,7 +453,7 @@ def figure_doctorate_region(palette):
     plt.clf()
 
 
-def _figure_doctorate_region(network, ax, palette):
+def _doctorate_region(network, ax, palette):
 
     assert palette in ['hatches', 'explicit', 'split']
 
@@ -587,7 +587,7 @@ def _figure_doctorate_region(network, ax, palette):
     return palette
 
 
-def figure_lorentz_curve_region():
+def lorentz_curve_region():
     
     fig_path = "./fig/lorentz_curve_region.pdf"
 
@@ -609,9 +609,9 @@ def figure_lorentz_curve_region():
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
 
-    _figure_lorentz_curve_region(networks_dict["Biology"], ax[0])
-    _figure_lorentz_curve_region(networks_dict["Computer Science"], ax[1])
-    _figure_lorentz_curve_region(networks_dict["Physics"], ax[2])
+    _lorentz_curve_region(networks_dict["Biology"], ax[0])
+    _lorentz_curve_region(networks_dict["Computer Science"], ax[1])
+    _lorentz_curve_region(networks_dict["Physics"], ax[2])
 
     handles1 = [Patch(facecolor=networks_dict["Biology"].color, label="Biology", alpha=param_alpha, edgecolor='black', linewidth=3),
                 Patch(facecolor=networks_dict["Computer Science"].color, label="Computer Science", alpha=param_alpha, edgecolor='black', linewidth=3),
@@ -631,7 +631,7 @@ def figure_lorentz_curve_region():
     plt.clf()
 
 
-def _figure_lorentz_curve_region(network, ax):
+def _lorentz_curve_region(network, ax):
     
     ns_seoul = NS('region', area_seoul, 'in', label="Seoul")
     ns_cap = NS('region', area_capital, 'in', label="Capital Area")
@@ -694,7 +694,7 @@ def _figure_lorentz_curve_region(network, ax):
 
         ax.plot(x_co, y_co, color=network.color, linewidth=2, label=label, alpha=param_alpha, linestyle=style)
         ax.scatter(div_10per, [sample_from_data(x_co, y_co, index) for index in div_10per],
-                   c=network.color, s=30, clion=False, alpha=1, marker='o')
+                   c=network.color, s=30, clip_on=False, alpha=1, marker='o')
 
         ax.plot(base_co, base_co, color='black', linewidth=0.5)
 
@@ -734,11 +734,11 @@ def _figure_lorentz_curve_region(network, ax):
 
 if __name__ == "__main__":
     
-    # figure_doctorate_group(palette='hatches')
-    figure_doctorate_group(palette='explicit')
-    # figure_doctorate_group(palette='split')
+    # doctorate_group(palette='hatches')
+    doctorate_group(palette='explicit')
+    # doctorate_group(palette='split')
 
-    # figure_doctorate_region(palette='hatches')
-    figure_doctorate_region(palette='explicit')
-    # figure_doctorate_region(palette='split')
+    # doctorate_region(palette='hatches')
+    doctorate_region(palette='explicit')
+    # doctorate_region(palette='split')
 

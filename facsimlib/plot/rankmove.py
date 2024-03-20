@@ -24,7 +24,7 @@ def _interhistogram(x, y):
     return x_co, y_co
 
 
-def figure_rank_move():
+def rank_move():
 
     fig_path = "./fig/rank_move.pdf"
 
@@ -40,9 +40,9 @@ def figure_rank_move():
     plt.ylim(0, 0.25)
     plt.yticks(np.arange(0, 0.26, 0.125), fontsize=param_tick_size)
 
-    _figure_rank_move(network_dict["Biology"], ax[0])
-    _figure_rank_move(network_dict["Computer Science"], ax[1])
-    _figure_rank_move(network_dict["Physics"], ax[2])
+    _rank_move(network_dict["Biology"], ax[0])
+    _rank_move(network_dict["Computer Science"], ax[1])
+    _rank_move(network_dict["Physics"], ax[2])
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -76,7 +76,7 @@ def figure_rank_move():
     plt.clf()
 
 
-def _figure_rank_move(network, ax):
+def _rank_move(network, ax):
 
     network_c = network.domestic
 
@@ -139,7 +139,7 @@ def _figure_rank_move(network, ax):
         ax.plot(x_interp, y_interp, color=network.color, linewidth=5, alpha=param_alpha, linestyle=style)
 
 
-def figure_rank_move_3group(net_type='global'):
+def rank_move_3group(net_type='global'):
 
     fig_path = f"./fig/rank_move_3group_{net_type}.pdf"
 
@@ -155,9 +155,9 @@ def figure_rank_move_3group(net_type='global'):
     plt.ylim(0, 0.25)
     plt.yticks(np.arange(0, 0.26, 0.125), fontsize=param_tick_size)
 
-    _figure_rank_move_3group(network_dict["Biology"], ax[0])
-    _figure_rank_move_3group(network_dict["Computer Science"], ax[1])
-    _figure_rank_move_3group(network_dict["Physics"], ax[2])
+    _rank_move_3group(network_dict["Biology"], ax[0])
+    _rank_move_3group(network_dict["Computer Science"], ax[1])
+    _rank_move_3group(network_dict["Physics"], ax[2])
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -191,7 +191,7 @@ def figure_rank_move_3group(net_type='global'):
     plt.clf()
 
 
-def figure_rank_move_3group_with_inset(net_type='global'):
+def rank_move_3group_with_inset(net_type='global'):
 
     fig_path = f"./fig/rank_move_3group_{net_type}_inset.pdf"
 
@@ -207,9 +207,9 @@ def figure_rank_move_3group_with_inset(net_type='global'):
     plt.ylim(0, 0.25)
     plt.yticks(np.arange(0, 0.26, 0.125), fontsize=param_tick_size)
 
-    _figure_rank_move_3group(network_dict["Biology"], ax[0], inset=True)
-    _figure_rank_move_3group(network_dict["Computer Science"], ax[1], inset=True)
-    _figure_rank_move_3group(network_dict["Physics"], ax[2], inset=True)
+    _rank_move_3group(network_dict["Biology"], ax[0], inset=True)
+    _rank_move_3group(network_dict["Computer Science"], ax[1], inset=True)
+    _rank_move_3group(network_dict["Physics"], ax[2], inset=True)
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -243,7 +243,7 @@ def figure_rank_move_3group_with_inset(net_type='global'):
     plt.clf()
 
 
-def figure_rank_move_3group_separate(net_type='global'):
+def rank_move_3group_separate(net_type='global'):
 
     fig_path = f"./fig/rank_move_3group_{net_type}_sep.pdf"
 
@@ -259,9 +259,9 @@ def figure_rank_move_3group_separate(net_type='global'):
     plt.ylim(0, 0.5)
     plt.yticks(np.arange(0, 0.51, 0.25), fontsize=param_tick_size)
 
-    _figure_rank_move_3group(network_dict["Biology"], ax[0], normalize_sep=True)
-    _figure_rank_move_3group(network_dict["Computer Science"], ax[1], normalize_sep=True)
-    _figure_rank_move_3group(network_dict["Physics"], ax[2], normalize_sep=True)
+    _rank_move_3group(network_dict["Biology"], ax[0], normalize_sep=True)
+    _rank_move_3group(network_dict["Computer Science"], ax[1], normalize_sep=True)
+    _rank_move_3group(network_dict["Physics"], ax[2], normalize_sep=True)
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -295,12 +295,12 @@ def figure_rank_move_3group_separate(net_type='global'):
     plt.clf()
 
 
-def _figure_rank_move_3group(network, ax, normalize_sep=False, inset=False):
+def _rank_move_3group(network, ax, normalize_sep=False, inset=False):
 
     config = [((0, 20), param_alpha, '-'), ((40, 60), param_alpha, ':'), ((80, 100), param_alpha, '-.')]
 
     for group, alpha, style in config:
-        _figure_rank_move_of_group(network, ax, group, alpha=alpha, style=style, normalize_sep=normalize_sep)
+        _rank_move_of_group(network, ax, group, alpha=alpha, style=style, normalize_sep=normalize_sep)
 
     if inset:
 
@@ -308,10 +308,10 @@ def _figure_rank_move_3group(network, ax, normalize_sep=False, inset=False):
         ax_inset.set_xlim(-1, 1)
         ax_inset.set_ylim(0, 0.75)
 
-        _figure_rank_move_3group(network, ax_inset, normalize_sep=True)
+        _rank_move_3group(network, ax_inset, normalize_sep=True)
 
 
-def _figure_rank_move_of_group(network, ax, percent, alpha=param_alpha, style='-', normalize_sep=False):
+def _rank_move_of_group(network, ax, percent, alpha=param_alpha, style='-', normalize_sep=False):
      
     percent_low = percent[0]
     percent_high = percent[1]
@@ -363,7 +363,7 @@ def _figure_rank_move_of_group(network, ax, percent, alpha=param_alpha, style='-
     ax.plot(x_interp, y_interp, color=network.color, linewidth=5, alpha=alpha, linestyle=style)
 
 
-def figure_rank_move_phdnation():
+def rank_move_phdnation():
 
     fig_path = "./fig/rank_move_phdnation.pdf"
 
@@ -379,9 +379,9 @@ def figure_rank_move_phdnation():
     plt.ylim(0, 0.5)
     plt.yticks(np.arange(0, 0.51, 0.25), fontsize=param_tick_size)
 
-    _figure_rank_move_phdnation(network_dict["Biology"], ax[0], normalize_sep=True)
-    _figure_rank_move_phdnation(network_dict["Computer Science"], ax[1], normalize_sep=True)
-    _figure_rank_move_phdnation(network_dict["Physics"], ax[2], normalize_sep=True)
+    _rank_move_phdnation(network_dict["Biology"], ax[0], normalize_sep=True)
+    _rank_move_phdnation(network_dict["Computer Science"], ax[1], normalize_sep=True)
+    _rank_move_phdnation(network_dict["Physics"], ax[2], normalize_sep=True)
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -414,15 +414,15 @@ def figure_rank_move_phdnation():
     plt.clf()
 
 
-def _figure_rank_move_phdnation(network, ax, normalize_sep=False):
+def _rank_move_phdnation(network, ax, normalize_sep=False):
 
     config = [('domestic', param_alpha, '-'), ('global', param_alpha, ':')]
 
     for group, alpha, style in config:
-        _figure_rank_move_of_phdnation(network, ax, group, alpha=alpha, style=style, normalize_sep=normalize_sep)
+        _rank_move_of_phdnation(network, ax, group, alpha=alpha, style=style, normalize_sep=normalize_sep)
 
 
-def _figure_rank_move_of_phdnation(network, ax, phdnation, alpha=param_alpha, style='-', normalize_sep=False):
+def _rank_move_of_phdnation(network, ax, phdnation, alpha=param_alpha, style='-', normalize_sep=False):
      
     if phdnation not in ['domestic', 'global']:
         return None
@@ -484,7 +484,7 @@ def _figure_rank_move_of_phdnation(network, ax, phdnation, alpha=param_alpha, st
     ax.plot(x_interp, y_interp, color=network.color, linewidth=5, alpha=alpha, linestyle=style)
 
 
-def figure_rank_move_region_with_inset(net_type='global'):
+def rank_move_region_with_inset(net_type='global'):
 
     fig_path = f"./fig/rank_move_region_{net_type}_inset.pdf"
 
@@ -500,9 +500,9 @@ def figure_rank_move_region_with_inset(net_type='global'):
     plt.ylim(0, 0.25)
     plt.yticks(np.arange(0, 0.26, 0.125), fontsize=param_tick_size)
 
-    _figure_rank_move_region(network_dict["Biology"], ax[0], inset=True)
-    _figure_rank_move_region(network_dict["Computer Science"], ax[1], inset=True)
-    _figure_rank_move_region(network_dict["Physics"], ax[2], inset=True)
+    _rank_move_region(network_dict["Biology"], ax[0], inset=True)
+    _rank_move_region(network_dict["Computer Science"], ax[1], inset=True)
+    _rank_move_region(network_dict["Physics"], ax[2], inset=True)
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -540,7 +540,7 @@ def figure_rank_move_region_with_inset(net_type='global'):
     plt.clf()
 
 
-def figure_rank_move_region_by_pair(net_type='global'):
+def rank_move_region_by_pair(net_type='global'):
 
     fig_path = f"./fig/rank_move_region_{net_type}_by_pair.pdf"
 
@@ -569,9 +569,9 @@ def figure_rank_move_region_by_pair(net_type='global'):
     
     for i in range(4):
 
-        _figure_rank_move_region(network_dict["Biology"], ax[i, 0], inset=True, custom=[config[i], config[4]])
-        _figure_rank_move_region(network_dict["Computer Science"], ax[i, 1], inset=True, custom=[config[i], config[4]])
-        _figure_rank_move_region(network_dict["Physics"], ax[i, 2], inset=True, custom=[config[i], config[4]])
+        _rank_move_region(network_dict["Biology"], ax[i, 0], inset=True, custom=[config[i], config[4]])
+        _rank_move_region(network_dict["Computer Science"], ax[i, 1], inset=True, custom=[config[i], config[4]])
+        _rank_move_region(network_dict["Physics"], ax[i, 2], inset=True, custom=[config[i], config[4]])
 
     x_label = "Relative Movement of Faculty (Normalized)"
     y_label = "Density"
@@ -614,7 +614,7 @@ def figure_rank_move_region_by_pair(net_type='global'):
     plt.clf()
 
 
-def _figure_rank_move_region(network, ax, normalize_sep=False, inset=False, custom=None):
+def _rank_move_region(network, ax, normalize_sep=False, inset=False, custom=None):
 
     regions = [NS('region', area_seoul, 'in', label="Seoul"),
                NS('region', area_capital, 'in', label="Capital Area"),
@@ -633,7 +633,7 @@ def _figure_rank_move_region(network, ax, normalize_sep=False, inset=False, cust
         config = custom
 
     for ns, alpha, style in config:
-        _figure_rank_move_of_ns(network, ax, ns, alpha=alpha, style=style, normalize_sep=normalize_sep)
+        _rank_move_of_ns(network, ax, ns, alpha=alpha, style=style, normalize_sep=normalize_sep)
 
     if inset:
 
@@ -641,10 +641,10 @@ def _figure_rank_move_region(network, ax, normalize_sep=False, inset=False, cust
         ax_inset.set_xlim(-1, 1)
         ax_inset.set_ylim(0, 0.75)
 
-        _figure_rank_move_region(network, ax_inset, normalize_sep=True, custom=custom)
+        _rank_move_region(network, ax_inset, normalize_sep=True, custom=custom)
 
 
-def _figure_rank_move_of_ns(network, ax, ns, alpha=param_alpha, style='-', normalize_sep=False):
+def _rank_move_of_ns(network, ax, ns, alpha=param_alpha, style='-', normalize_sep=False):
 
     rank_moves = []
 
@@ -692,4 +692,4 @@ def _figure_rank_move_of_ns(network, ax, ns, alpha=param_alpha, style='-', norma
 
 
 if __name__ == "__main__":
-    figure_rank_move_phdnation()
+    rank_move_phdnation()

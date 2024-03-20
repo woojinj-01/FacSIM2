@@ -3,7 +3,7 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 import matplotlib as mpl
 import numpy as np
-import scipy.stats
+# import scipy.stats
 
 import facsimlib.processing
 import facsimlib.math
@@ -12,7 +12,7 @@ from facsimlib.text import area_seoul, area_capital, area_metro, area_others
 from facsimlib.plot.params import *
 
 
-def figure_rank_variation():
+def rank_variation():
 
     fig_path = "./fig/rank_variation.pdf"
 
@@ -28,9 +28,9 @@ def figure_rank_variation():
     plt.ylim(-1, 1)
     plt.yticks(np.arange(-1, 1.05, 0.25), fontsize=param_tick_size)
 
-    _figure_rank_variation(network_dict["Biology"], ax[0])
-    _figure_rank_variation(network_dict["Computer Science"], ax[1])
-    _figure_rank_variation(network_dict["Physics"], ax[2])
+    _rank_variation(network_dict["Biology"], ax[0])
+    _rank_variation(network_dict["Computer Science"], ax[1])
+    _rank_variation(network_dict["Physics"], ax[2])
 
     x_label = "Domestic Rank (Normalized)"
     y_label = "Domestic Rank - Global Rank (Normalized)"
@@ -60,7 +60,7 @@ def figure_rank_variation():
     plt.clf()
 
 
-def figure_rank_variation_random():
+def rank_variation_random():
 
     fig_path = "./fig/rank_variation_random.pdf"
 
@@ -76,14 +76,14 @@ def figure_rank_variation_random():
     plt.ylim(-1, 1)
     plt.yticks(np.arange(-1, 1.05, 0.25), fontsize=param_tick_size)
 
-    variations = _figure_rank_variation(network_dict["Biology"], ax[0])
-    _figure_rank_variation_random(network_dict["Biology"], ax[0], to_compare=variations)
+    variations = _rank_variation(network_dict["Biology"], ax[0])
+    _rank_variation_random(network_dict["Biology"], ax[0], to_compare=variations)
 
-    variations = _figure_rank_variation(network_dict["Computer Science"], ax[1])
-    _figure_rank_variation_random(network_dict["Computer Science"], ax[1], to_compare=variations)
+    variations = _rank_variation(network_dict["Computer Science"], ax[1])
+    _rank_variation_random(network_dict["Computer Science"], ax[1], to_compare=variations)
 
-    variations = _figure_rank_variation(network_dict["Physics"], ax[2])
-    _figure_rank_variation_random(network_dict["Physics"], ax[2], to_compare=variations)
+    variations = _rank_variation(network_dict["Physics"], ax[2])
+    _rank_variation_random(network_dict["Physics"], ax[2], to_compare=variations)
 
     x_label = "Domestic Rank (Normalized)"
     y_label = "Domestic Rank - Global Rank (Normalized)"
@@ -115,7 +115,7 @@ def figure_rank_variation_random():
     plt.clf()
 
 
-def figure_rank_variation_random_zscore():
+def rank_variation_random_zscore():
 
     fig_path = "./fig/rank_variation_random_zscore.pdf"
 
@@ -131,14 +131,14 @@ def figure_rank_variation_random_zscore():
     # plt.ylim(-5, 5)
     # plt.yticks(np.arange(-5, 6, 2.5), fontsize=param_tick_size)
 
-    variations = _figure_rank_variation(network_dict["Biology"], None)
-    _figure_rank_variation_random_zscore(network_dict["Biology"], ax[0], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Biology"], None)
+    _rank_variation_random_zscore(network_dict["Biology"], ax[0], to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Computer Science"], None)
-    _figure_rank_variation_random_zscore(network_dict["Computer Science"], ax[1], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Computer Science"], None)
+    _rank_variation_random_zscore(network_dict["Computer Science"], ax[1], to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Physics"], None)
-    _figure_rank_variation_random_zscore(network_dict["Physics"], ax[2], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Physics"], None)
+    _rank_variation_random_zscore(network_dict["Physics"], ax[2], to_compare=variations, marker='o')
 
     x_label = "Domestic Rank (Normalized)"
     y_label = "Z-score"
@@ -168,7 +168,7 @@ def figure_rank_variation_random_zscore():
     plt.clf()
 
 
-def figure_rank_variation_random_zscore_vs_ratio():
+def rank_variation_random_zscore_vs_ratio():
 
     fig_path = "./fig/rank_variation_random_zscore_vs_ratio.pdf"
 
@@ -184,14 +184,14 @@ def figure_rank_variation_random_zscore_vs_ratio():
     # plt.ylim(-5, 5)
     # plt.yticks(np.arange(-5, 6, 2.5), fontsize=param_tick_size)
 
-    variations = _figure_rank_variation(network_dict["Biology"], None)
-    _figure_rank_variation_random_zscore_vs_ratio(network_dict["Biology"], ax[0], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Biology"], None)
+    _rank_variation_random_zscore_vs_ratio(network_dict["Biology"], ax[0], to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Computer Science"], None)
-    _figure_rank_variation_random_zscore_vs_ratio(network_dict["Computer Science"], ax[1], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Computer Science"], None)
+    _rank_variation_random_zscore_vs_ratio(network_dict["Computer Science"], ax[1], to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Physics"], None)
-    _figure_rank_variation_random_zscore_vs_ratio(network_dict["Physics"], ax[2], to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Physics"], None)
+    _rank_variation_random_zscore_vs_ratio(network_dict["Physics"], ax[2], to_compare=variations, marker='o')
 
     x_label = "Ratio"
     y_label = "Z-score"
@@ -221,7 +221,7 @@ def figure_rank_variation_random_zscore_vs_ratio():
     plt.clf()
 
 
-def figure_rank_variation_random_zscore_mag_vs_ratio():
+def rank_variation_random_zscore_mag_vs_ratio():
 
     fig_path = "./fig/rank_variation_random_zscore_mag_vs_ratio.pdf"
 
@@ -238,14 +238,14 @@ def figure_rank_variation_random_zscore_mag_vs_ratio():
 
     zscores = []
 
-    variations = _figure_rank_variation(network_dict["Biology"], None)
-    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Biology"], ax[0], cmap, to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Biology"], None)
+    zscores += _rank_variation_random_zscore_mag_vs_ratio(network_dict["Biology"], ax[0], cmap, to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Computer Science"], None)
-    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Computer Science"], ax[1], cmap, to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Computer Science"], None)
+    zscores += _rank_variation_random_zscore_mag_vs_ratio(network_dict["Computer Science"], ax[1], cmap, to_compare=variations, marker='o')
 
-    variations = _figure_rank_variation(network_dict["Physics"], None)
-    zscores += _figure_rank_variation_random_zscore_mag_vs_ratio(network_dict["Physics"], ax[2], cmap, to_compare=variations, marker='o')
+    variations = _rank_variation(network_dict["Physics"], None)
+    zscores += _rank_variation_random_zscore_mag_vs_ratio(network_dict["Physics"], ax[2], cmap, to_compare=variations, marker='o')
 
     x_label = "Ratio of Foreign Doctorates"
     y_label = "Number of Foreign Doctorates"
@@ -274,7 +274,7 @@ def figure_rank_variation_random_zscore_mag_vs_ratio():
     plt.clf()
 
 
-def _figure_rank_variation(network, ax, marker='o'):
+def _rank_variation(network, ax, marker='o'):
 
     if ax is None:
         do_plot = False
@@ -320,7 +320,7 @@ def _figure_rank_variation(network, ax, marker='o'):
     return to_compare
 
 
-def _figure_rank_variation_random(network, ax, marker='x', to_compare=None):
+def _rank_variation_random(network, ax, marker='x', to_compare=None):
 
     trial = 500
 
@@ -367,7 +367,7 @@ def _figure_rank_variation_random(network, ax, marker='x', to_compare=None):
     ax.scatter(list(vari_dict.keys()), list(vari_dict.values()), s=70, marker=marker, c=network.color, alpha=param_alpha)
 
 
-def _figure_rank_variation_random_zscore(network, ax, marker='x', to_compare=None):
+def _rank_variation_random_zscore(network, ax, marker='x', to_compare=None):
 
     trial = 500
     domestic_ranks = network.domestic.set_ranks().ranks(normalized=True)
@@ -470,7 +470,7 @@ def _figure_rank_variation_random_zscore(network, ax, marker='x', to_compare=Non
     # ax.plot(x_co_sorted, stds_sorted, marker='s', c='red', linestyle='--', alpha=param_alpha)
 
 
-def _figure_rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_compare=None):
+def _rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_compare=None):
 
     trial = 500
     domestic_ranks = network.domestic.set_ranks().ranks(normalized=True)
@@ -574,14 +574,14 @@ def _figure_rank_variation_random_zscore_vs_ratio(network, ax, marker='x', to_co
 
     ax.scatter(ratio_foreign, z_scores, s=200, marker=marker, c=network.color, alpha=param_alpha)
 
-    print(f"=== Correlations: {network.name}")
-    print(scipy.stats.pearsonr(ratio_foreign, z_scores))
-    print(scipy.stats.spearmanr(ratio_foreign, z_scores))
-    print(scipy.stats.kendalltau(ratio_foreign, z_scores))
-    print("\n")
+    # print(f"=== Correlations: {network.name}")
+    # print(scipy.stats.pearsonr(ratio_foreign, z_scores))
+    # print(scipy.stats.spearmanr(ratio_foreign, z_scores))
+    # print(scipy.stats.kendalltau(ratio_foreign, z_scores))
+    # print("\n")
 
 
-def _figure_rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker='x', to_compare=None):
+def _rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker='x', to_compare=None):
 
     trial = 500
     domestic_ranks = network.domestic.set_ranks().ranks(normalized=True)
@@ -685,4 +685,4 @@ def _figure_rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker=
 
 
 if __name__ == "__main__":
-    figure_rank_variation_random_zscore_vs_ratio()
+    rank_variation_random_zscore_vs_ratio()

@@ -12,7 +12,7 @@ palette_dict = {"Biology": palette_bio, "Domestic Biology": palette_bio,
                 "Physics": palette_phy, "Domestic Physics": palette_phy}
 
 
-def figure_hires(palette):
+def hires(palette='explicit'):
 
     assert palette in ['hatches', 'explicit', 'split']
     
@@ -25,11 +25,11 @@ def figure_hires(palette):
 
     fig, ax = plt.subplots(2, 2, figsize=(2 * param_fig_xsize, 2 * param_fig_ysize), dpi=200)
 
-    _figure_hires_distro(networks_global, ax[0, 0], palette)
-    _figure_hires_z(networks_global, ax[0, 1], palette)
+    _hires_distro(networks_global, ax[0, 0], palette)
+    _hires_z(networks_global, ax[0, 1], palette)
 
-    _figure_hires_distro(networks_domestic, ax[1, 0], palette)
-    _figure_hires_z(networks_domestic, ax[1, 1], palette)
+    _hires_distro(networks_domestic, ax[1, 0], palette)
+    _hires_z(networks_domestic, ax[1, 1], palette)
 
     if palette == 'hatches':
 
@@ -80,7 +80,7 @@ def figure_hires(palette):
     plt.clf()
 
 
-def figure_hires_using_colors():
+def hires_using_colors():
 
     print("This function is deprecated")
     assert False
@@ -94,11 +94,11 @@ def figure_hires_using_colors():
 
     fig, ax = plt.subplots(2, 2, figsize=(2 * param_fig_xsize, 2 * param_fig_ysize), dpi=200)
 
-    _figure_hires_distro(networks_global, ax[0, 0], using_hatches=False)
-    _figure_hires_z(networks_global, ax[0, 1], using_hatches=False)
+    _hires_distro(networks_global, ax[0, 0], using_hatches=False)
+    _hires_z(networks_global, ax[0, 1], using_hatches=False)
 
-    _figure_hires_distro(networks_domestic, ax[1, 0], using_hatches=False)
-    _figure_hires_z(networks_domestic, ax[1, 1], using_hatches=False)
+    _hires_distro(networks_domestic, ax[1, 0], using_hatches=False)
+    _hires_z(networks_domestic, ax[1, 1], using_hatches=False)
 
     # handles1 = [Patch(facecolor=networks_global["Biology"].color, alpha=param_alpha, edgecolor='black', linewidth=3),
     #             Patch(facecolor=networks_global["Computer Science"].color, alpha=param_alpha, edgecolor='black', linewidth=3),
@@ -119,7 +119,7 @@ def figure_hires_using_colors():
     plt.clf()
 
 
-def _figure_hires_distro(network_dict, ax, palette):
+def _hires_distro(network_dict, ax, palette):
 
     assert palette in ['hatches', 'explicit', 'split']
 
@@ -174,7 +174,7 @@ def _figure_hires_distro(network_dict, ax, palette):
                alpha=param_alpha, edgecolor='black', linewidth=2)
             
 
-def _figure_hires_z(network_dict, ax, palette):
+def _hires_z(network_dict, ax, palette):
 
     assert palette in ['hatches', 'explicit', 'split']
 
@@ -271,6 +271,6 @@ def _figure_hires_z(network_dict, ax, palette):
 
 if __name__ == "__main__":
 
-    figure_hires('hatches')
-    figure_hires('explicit')
-    figure_hires('split')
+    hires('hatches')
+    hires('explicit')
+    hires('split')
