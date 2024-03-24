@@ -147,7 +147,7 @@ class Field():
 
         self_domestic = self.filter(select)
         self_domestic.name = f"Domestic {self.name}"
-        self_domestic.net_type = 'domestic'
+        self_domestic.type = 'domestic'
 
         return self_domestic
     
@@ -242,7 +242,7 @@ class Field():
 
         return 1
     
-    def set_ranks(self, add_one=True):
+    def set_ranks(self, add_one=True, alpha=0):
 
         assert isinstance(add_one, bool)
 
@@ -253,7 +253,7 @@ class Field():
         if add_one:
             adj_mat += 1
 
-        scores = sp.get_ranks(adj_mat)
+        scores = sp.SpringRank(adj_mat, alpha=alpha)
 
         sorted_indices = np.argsort(scores)[::-1]
 
