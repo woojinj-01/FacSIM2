@@ -51,9 +51,9 @@ def hires(palette='explicit'):
 
         if palette == 'explicit':
 
-            pal_bio = palette_bio[0:3]
-            pal_cs = palette_cs[0:3]
-            pal_phy = palette_phy[0:3]
+            pal_bio = [palette_bio[0], palette_bio[2], palette_bio[4]]
+            pal_cs = [palette_cs[0], palette_cs[2], palette_cs[4]]
+            pal_phy = [palette_phy[0], palette_phy[2], palette_phy[4]]
         
         else:
             pal_bio = split_color_by(networks_global["Biology"].color, 3)
@@ -144,7 +144,9 @@ def _hires_distro(network_dict, ax, palette):
     ax.set_ylim(0, 1)
     ax.set_yticks(np.arange(0, 1.1, 0.25))
 
-    for net in network_dict.values():
+    for net_name in ["Biology", "Computer Science", "Physics"]:
+
+        net = network_dict[net_name]
 
         if len(net.name.split(' ')) >= 2:
             name_to_put = net.name.replace(' ', '\n')
@@ -162,15 +164,16 @@ def _hires_distro(network_dict, ax, palette):
             continue
         
         elif palette == 'explicit':
-            palette = palette_dict[net.name][0:3]
+            selected = palette_dict[net.name]
+            palette_to_use = [selected[0], selected[2], selected[4]]
 
         else:
             palette = split_color_by(net.color, 3)
 
-        ax.bar(name_to_put, down_hires[net.name], color=palette[0], alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.bar(name_to_put, self_hires[net.name], color=palette[1], bottom=down_hires[net.name],
+        ax.bar(name_to_put, down_hires[net.name], color=palette_to_use[0], alpha=param_alpha, edgecolor='black', linewidth=2)
+        ax.bar(name_to_put, self_hires[net.name], color=palette_to_use[1], bottom=down_hires[net.name],
                alpha=param_alpha, edgecolor='black', linewidth=2)
-        ax.bar(name_to_put, uhires[net.name], color=palette[2], bottom=down_hires[net.name] + self_hires[net.name],
+        ax.bar(name_to_put, uhires[net.name], color=palette_to_use[2], bottom=down_hires[net.name] + self_hires[net.name],
                alpha=param_alpha, edgecolor='black', linewidth=2)
             
 
@@ -178,7 +181,7 @@ def _hires_z(network_dict, ax, palette):
 
     assert palette in ['hatches', 'explicit', 'split']
 
-    trial = 500
+    trial = 10
 
     uhires = {}
     self_hires = {}
@@ -217,13 +220,15 @@ def _hires_z(network_dict, ax, palette):
     y_label = "Z-Score"
     ax.set_ylabel(y_label)
 
-    ax.set_ylim(-10, 15)
-    ax.set_yticks(range(-10, 16, 5))
+    ax.set_ylim(-10, 20)
+    ax.set_yticks(range(-10, 21, 5))
 
     bar_width = 0.25
     x_pos = 0
 
-    for net in network_dict.values():
+    for net_name in ["Biology", "Computer Science", "Physics"]:
+
+        net = network_dict[net_name]
 
         x_pos_1 = x_pos
         x_pos_2 = x_pos + bar_width
@@ -240,16 +245,17 @@ def _hires_z(network_dict, ax, palette):
             
         else:
             if palette == 'explicit':
-                palette = palette_dict[net.name][0:3]
+                selected = palette_dict[net.name]
+                palette_to_use = [selected[0], selected[2], selected[4]]
 
             else:
-                palette = split_color_by(net.color, 3)
+                palette_to_use = split_color_by(net.color, 3)
 
-            ax.bar(x_pos_1, uhires[net.name], width=bar_width, color=palette[0],
+            ax.bar(x_pos_1, uhires[net.name], width=bar_width, color=palette_to_use[0],
                    alpha=param_alpha, edgecolor='black', linewidth=2)
-            ax.bar(x_pos_2, self_hires[net.name], width=bar_width, color=palette[1],
+            ax.bar(x_pos_2, self_hires[net.name], width=bar_width, color=palette_to_use[1],
                    alpha=param_alpha, edgecolor='black', linewidth=2)
-            ax.bar(x_pos_3, down_hires[net.name], width=bar_width, color=palette[2],
+            ax.bar(x_pos_3, down_hires[net.name], width=bar_width, color=palette_to_use[2],
                    alpha=param_alpha, edgecolor='black', linewidth=2)
 
         x_pos += 1
@@ -271,6 +277,6 @@ def _hires_z(network_dict, ax, palette):
 
 if __name__ == "__main__":
 
-    hires('hatches')
+    # hires('hatches')
     hires('explicit')
-    hires('split')
+    # hires('split')

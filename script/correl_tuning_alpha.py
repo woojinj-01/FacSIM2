@@ -67,7 +67,7 @@ def tune_alpha_and_plot(alpha_list, net_type):
 
             correls.append(correl_sp)
 
-        plt.plot(alpha_list, correls, label=name, c=nets[name].color, alpha=param_alpha)
+        plt.plot(alpha_list, correls, label=nets[name].name, c=nets[name].color, alpha=param_alpha)
 
     plt.xlim(min_alpha, max_alpha)
     plt.hlines(1, min_alpha, max_alpha, colors='black', linestyles='dashed', linewidth=1)

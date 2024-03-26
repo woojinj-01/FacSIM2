@@ -685,4 +685,4 @@ def _rank_variation_random_zscore_mag_vs_ratio(network, ax, cmap, marker='x', to
 
 
 if __name__ == "__main__":
-    rank_variation_random_zscore_vs_ratio()
+    rank_variation_random_zscore()

@@ -263,6 +263,7 @@ def construct_network(net_type='global', data=up_to_date):
         network_dict[field] = Field(name=field)
 
         print(f"=== Field: {field} ===")
+        print(f"Net type: {net_type}")
 
         total, effective = process_file(df_list, network_dict[field])
 

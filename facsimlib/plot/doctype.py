@@ -17,7 +17,7 @@ palette_dict = {"Biology": palette_bio, "Domestic Biology": palette_bio,
                 "Computer Science": palette_cs, "Domestic Computer Science": palette_cs,
                 "Physics": palette_phy, "Domestic Physics": palette_phy}
 
-explicit_alpha = 1
+explicit_alpha = param_alpha
 
 
 def doctorate_group(palette='explicit'):
@@ -284,8 +284,8 @@ def lorentz_curve_group():
     plt.ylim(0, 100)
     plt.yticks(range(0, 101, 25), fontsize=param_tick_size)
 
-    x_label = "Cumulative Ratio of Groups (%)"
-    y_label = "Cumulative Ratio of In Degrees (%)"
+    x_label = "Ratio of Groups (%)"
+    y_label = "Ratio of In Degrees (%)"
 
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)
@@ -605,8 +605,8 @@ def lorentz_curve_region():
     plt.ylim(0, 100)
     plt.yticks(range(0, 101, 25), fontsize=param_tick_size)
 
-    x_label = "Cumulative Ratio of Groups (%)"
-    y_label = "Cumulative Ratio of In Degrees (%)"
+    x_label = "Ratio of Groups (%)"
+    y_label = "Ratio of In Degrees (%)"
 
     ax[0].set_ylabel(y_label, fontsize=param_ylabel_size)
     ax[1].set_xlabel(x_label, fontsize=param_xlabel_size)

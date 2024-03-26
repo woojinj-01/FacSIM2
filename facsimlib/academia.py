@@ -2,6 +2,7 @@ import networkx as nx
 import facsimlib.SpringRank as sp
 from facsimlib.text import get_country_code, get_region, normalize_inst_name
 import facsimlib.processing
+from facsimlib.plot.palette import palette_bio, palette_cs, palette_phy
 
 from copy import deepcopy
 from random import shuffle
@@ -94,13 +95,16 @@ class Field():
         match self.name:
 
             case "Biology":
-                self.color = "#0584F2"
+                # self.color = "#0584F2"
+                self.color = palette_bio[0]
 
             case "Computer Science":
-                self.color = "#F18904"
+                # self.color = "#F18904"
+                self.color = palette_cs[0]
 
             case "Physics":
-                self.color = "#00743F"
+                # self.color = "#00743F"
+                self.color = palette_phy[0]
 
             case _:
 
@@ -242,7 +246,7 @@ class Field():
 
         return 1
     
-    def set_ranks(self, add_one=True, alpha=0):
+    def set_ranks(self, add_one=False, alpha=2):
 
         assert isinstance(add_one, bool)
 

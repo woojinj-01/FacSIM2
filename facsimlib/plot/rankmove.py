@@ -798,9 +798,10 @@ def _rank_move_box_region(network, ax):
 
     for patch, color in zip(bplot['boxes'], palette):
         patch.set_facecolor(color)
+        patch.set_alpha(param_alpha)
         
     ax.set_xticks([1, 2, 3, 4, 5], [ns.label for ns in regions])
 
 
 if __name__ == "__main__":
-    rank_move_box_region()
+    rank_move_box_region(net_type='domestic')

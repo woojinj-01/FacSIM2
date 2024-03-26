@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from matplotlib.patches import Patch
 import numpy as np
 import math
+import networkx as nx
+import community
 
 import facsimlib.processing
 import facsimlib.math
@@ -126,6 +129,12 @@ def lorentz_curve():
 
     labels = ["Biology", "Computer Science", "Physics"]
 
+    x_label = "Ratio of Institutions (%)"
+    y_label = "Ratio of Out Degrees (%)"
+
+    fig.supxlabel(x_label, fontsize=param_xlabel_size)
+    fig.supylabel(y_label, fontsize=param_ylabel_size)
+
     fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.06), ncol=5, frameon=False)
 
     plt.tight_layout(pad=1)
@@ -143,11 +152,8 @@ def _lorentz_curve(network_dict, ax):
     ax.set_ylim(0, 100)
     ax.set_yticks(range(0, 101, 25))
 
-    x_label = "Cumulative Ratio of Institutions (%)"
-    y_label = "Cumulative Ratio of Out Degrees (%)"
-
-    ax.set_xlabel(x_label, fontsize=param_xlabel_size)
-    ax.set_ylabel(y_label, fontsize=param_ylabel_size)
+    # ax.set_xlabel(x_label, fontsize=param_xlabel_size)
+    # ax.set_ylabel(y_label, fontsize=param_ylabel_size)
 
     for net in network_dict.values():
 
@@ -185,4 +191,39 @@ def _lorentz_curve(network_dict, ax):
 
             ax.text(centroid_x / 100, centroid_y / 100, text_to_put, transform=ax.transAxes,
                     ha='center', va='center', fontsize=param_pannel_size, fontweight='bold')
+            
+
+def louvain_community(network):
+
+    G = nx.MultiGraph(network.net)
+    pos = nx.spring_layout(G)
+    
+    partition = community.best_partition(G, partition=None, weight='weight', resolution=1, randomize=True)
+
+    partition_inverted = {}
+
+    for key, value in partition.items():
+
+        if value not in partition_inverted:
+            partition_inverted[value] = []
+
+        partition_inverted[value].append(key)
+    
+    # print(partition_inverted)
+    # print(partition_inverted.keys())
+
+    cmap = cm.get_cmap('viridis', max(partition.values()) + 1)
+    im = nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40,
+                                cmap=cmap, node_color=list(partition.values()))
+    nx.draw_networkx_edges(G, pos, alpha=0.5)
+
+    plt.colorbar(im)
+    plt.show()
+
+
+if __name__ == "__main__":
+
+    lorentz_curve()
+
+
 
